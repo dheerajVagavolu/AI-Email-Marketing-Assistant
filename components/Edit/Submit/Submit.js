@@ -13,14 +13,14 @@ const Submit = ({
   return (
     <>
       <div className={styles.main}>
-        <button className={styles.save_button} onClick={updateHandler}>
-          {isSaving ? "Saving ... " : "Save"}
+        <button className={styles.save_button} onClick={updateHandler} disabled={isSaving && isLoading}>
+          {isSaving ? " ... " : "Save"}
         </button>
 
         <div className={styles.optional}>
           <input
             type="text"
-            placeholder="website"
+            placeholder="Enter website"
             onChange={(e) => {
               setWebsite(e.target.value);
             }}
@@ -28,9 +28,9 @@ const Submit = ({
           <input type="checkbox" disabled={website === ""} onChange={(e) => setUseWebsite(e.target.checked)}/>
         </div>
 
-        <button className={styles.button} onClick={generateCampaign}>
+        <button className={styles.button} onClick={generateCampaign} disabled={isSaving && isLoading}>
           {isLoading
-            ? "Loading ... "
+            ? " ... "
             : isGenerated
             ? "Regenerate"
             : "Generate Samples"}

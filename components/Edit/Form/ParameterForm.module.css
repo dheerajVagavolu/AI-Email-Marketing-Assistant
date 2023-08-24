@@ -1,0 +1,20 @@
+.feedback {
+    position: fixed; /* Fixed positioning to overlay on top of other content */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the element */
+    padding: 20px 30px;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: white;
+    border-radius: 8px;
+    z-index: 999; /* Ensure it's on top of other elements */
+    opacity: 0; /* Start as invisible to enable fade-in effect */
+    animation: fadeIn 0.5s forwards; /* Animation named 'fadeIn' lasting 0.5s */
+  }
+  
+  /* Animation to fade in */
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }

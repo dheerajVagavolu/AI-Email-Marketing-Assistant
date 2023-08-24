@@ -4,6 +4,17 @@ import Example from "@/components/Home/Example/Example";
 
 import { useEffect, useState } from "react";
 
+const fetchCampaigns = async () => {
+  const dataJson = await fetch("http://localhost:3000/api/campaign/getAll");
+  const data = await dataJson.json();
+
+  console.log(data);
+
+  return {
+    data: data,
+  };
+};
+
 const createCampaign = async (
   name,
   preferences = { date: new Date().toLocaleString("en-US") }
@@ -35,21 +46,77 @@ const createCampaign = async (
 };
 
 const Home = ({ data }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const [campaigns, setCampaigns] = useState(data);
+
   const [campaignName, setCampaignName] = useState("");
-  const router = useRouter();
+
+  const addCampaign = async (name) => {
+    try {
+      setIsCreating(true);
+      const newCampaign = await createCampaign(name);
+      if (newCampaign) {
+        const refreshedCampaigns = await fetchCampaigns();
+        setCampaigns(refreshedCampaigns.data);
+      }
+    } catch (error) {
+      console.error(`Error Creating Campaign`, error);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleDeleteCampaign = async (_id) => {
+    setIsDeleting(true);
+    try {
+      const response = await fetch("/api/campaign/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ _id }),
+      });
+
+      if (!response.ok) {
+        const responseData = await response.json();
+        console.error(
+          `Error deleting item: ${responseData.message || "Unknown error"}`
+        );
+        return;
+      }
+
+      console.log(`Successfully deleted item with _id: ${_id}`);
+
+      // Remove the deleted campaign from the local state
+      // setCampaigns(campaigns.filter((campaign) => campaign._id !== _id));
+      const refreshedCampaigns = await fetchCampaigns();
+      setCampaigns(refreshedCampaigns.data);
+    } catch (error) {
+      console.error(`Error deleting item with _id: ${_id}`, error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className={styles.main}>
+      {isDeleting && <div className={styles.feedback}>Deleting...</div>}
+      {isCreating && <div className={styles.feedback}>Creating...</div>}
       <div className={styles.navbar}>
         <ul>
           <li>Campaigns</li>
-          <li>Users</li>
         </ul>
       </div>
       <div className={styles.campaigns}>
         <div className={styles.existing}>
-          {data.map((item) => (
-            <Example item={item} key={item._id}/>
+          {campaigns.map((item) => (
+            <Example
+              item={item}
+              key={item._id}
+              onDelete={handleDeleteCampaign}
+            />
           ))}
         </div>
         <div className={styles.add}>
@@ -62,8 +129,7 @@ const Home = ({ data }) => {
           <button
             onClick={() => {
               if (campaignName.trim() !== "") {
-                createCampaign(campaignName);
-                router.push('/');
+                addCampaign(campaignName);
               } else {
                 alert("Please enter a campaign name!");
               }

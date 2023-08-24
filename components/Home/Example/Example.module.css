@@ -31,6 +31,7 @@
 
 .name {
   font-size: 1.5em;
+  font-weight: 500;
   color: #2c3e50; /* Darker shade for name */
   margin: 0;
 }
@@ -98,3 +99,29 @@
 .actions button:focus {
   outline: none; /* Removing default focus for a clean look, but ensure accessibility in a real-world scenario */
 }
+
+/* Your existing CSS code... */
+
+
+@media (max-width: 480px) {
+    /* For mobile portrait */
+    .example {
+        padding: 10px;
+    }
+
+    .name {
+        font-size: 1.3em;
+        font-weight: 200;
+    }
+
+    .date, .inDepth li, .desc {
+        font-size: 0.8em;
+    }
+
+    .actions button {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+}
+
+/* End of responsive styles */

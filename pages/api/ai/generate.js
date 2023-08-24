@@ -30,7 +30,7 @@ const createPrompt = (campaign) => {
 
 {body}
 
-Separate each email with '---'. Refrain from using numbers, bullets, or quotations in the content.
+Separate each email with '---'. Refrain from using numbers, Email 1:, bullets, or quotations in the content.
 
 Preferences:
 ${preferencesText}`;
@@ -42,6 +42,23 @@ const createResponse = (message) => {
     .map((email) => ({ body: email.trim() })) // Wrap in an object
     .filter((emailObj) => emailObj.body !== ""); // Remove objects with empty 'body' value
 };
+
+// const demo = [
+//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
+//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
+//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
+//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
+//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
+// ]
+
+// export default async function handler(req, res) {
+//   if (req.method === "POST") {
+
+//     return res.status(200).json({ message: demo });
+//   } else {
+//     return res.status(405).end(); // Method Not Allowed if not a POST request.
+//   }
+// }
 
 export default async function handler(req, res) {
   if (req.method === "POST") {

@@ -1,50 +1,69 @@
 .main {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    padding: var(--space-medium);
+    
+    border-radius: 8px;
+}
+
+.save_button, .button {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: var(--space-medium) var(--space-large);
+    border-radius: var(--space-medium);
+    border: none;
+    transition: background-color 0.2s; /* Smooth transition on hover */
+    cursor: pointer;
+    outline: none;
 }
 
 .save_button {
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 1.2rem 2rem;
-    border-radius: 0.8rem;
-    border: none;
     background-color: rgb(155, 206, 130);
-    
     color: white;
 }
 
-.save_button:hover {
-    cursor: pointer;
+.save_button:hover, .save_button:focus {
     background-color: rgb(83, 159, 46);
 }
 
 .button {
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 1.5rem 2.5rem;
-    border-radius: 0.8rem;
-    border: none;
+    font-size: 1rem;
     background-color: rgb(228, 137, 101);
-    
     color: white;
 }
 
-.button:hover {
-    cursor: pointer;
+.button:hover, .button:focus {
     background-color: rgb(232, 78, 16);
 }
 
 .optional {
     display: flex;
-    align-items: center; /* Vertically align checkbox and input */
-    gap: 0.5rem; /* Spacing between child elements */
+    align-items: center;
+    gap: var(--space-small);
 }
 
 .optional input[type="text"] {
-    padding: 0.5rem;
-    border-radius: 0.4rem;
+    padding: var(--space-small);
+    border-radius: var(--space-small);
     border: 1px solid #ccc;
+    transition: border-color 0.2s; /* Smooth transition on focus */
 }
 
+.optional input[type="text"]:focus {
+    border-color: var(--primary-color);
+}
+
+@media (max-width: 720px) {
+    .main {
+        flex-direction: column;
+        gap: var(--space-medium);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .save_button, .button {
+        width: 100%;
+        padding: var(--space-small) var(--space-medium);
+        border-radius: var(--space-small);
+    }
+}

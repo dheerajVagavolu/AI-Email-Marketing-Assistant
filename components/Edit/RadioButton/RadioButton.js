@@ -6,7 +6,6 @@ const RadioButton = ({
   handleOptionChange,
   selectedOption,
 }) => {
-
   return (
     <div className={styles.main}>
       <h4 className={styles.left}>{title}</h4>
@@ -15,7 +14,9 @@ const RadioButton = ({
           <label key={option.value} className={styles.label}>
             <input
               type="radio"
+              key={option.value}
               name={title}
+              className={styles.label_input}
               value={option.value}
               checked={selectedOption === option.value}
               onChange={(e) => handleOptionChange(e.target.value)}

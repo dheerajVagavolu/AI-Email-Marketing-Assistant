@@ -45,10 +45,6 @@ const Edit = ({ isConnected }) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Campaign data:", campaign);
-  }, [campaign]);
-
-  useEffect(() => {
     // Check if the ref is attached and if the values are populated
 
     async function fetchCampaign() {
@@ -71,7 +67,7 @@ const Edit = ({ isConnected }) => {
     }
   }, [router.query._id]);
 
-  useEffect(() => {
+  const scrollDown = () => {
     if (
       resultsRef.current &&
       campaign.preferences.generatedSamples &&
@@ -82,7 +78,9 @@ const Edit = ({ isConnected }) => {
         block: "start",
       });
     }
-  }, [campaign]);
+  };
+
+  const [goingBack, setGoingBack] = useState(false);
 
   const editSample = (value, index) => {
     setSelectedItem(index);
@@ -90,10 +88,25 @@ const Edit = ({ isConnected }) => {
 
   return (
     <>
+      <navbar className={styles.home}>
+        <button
+          className={styles.home_button}
+          onClick={() => {
+            setGoingBack(true);
+            router.push("/");
+            setTimeout(() => {
+              setGoingBack(false);
+            }, 1000);
+          }}
+        >
+          <h2> Home</h2>
+        </button>
+      </navbar>
       <div className={styles.main}>
+      {goingBack && <div className={styles.feedback}>Loading</div>}
         <div className={styles.form}>
           <div className={styles.header}>
-            {campaign && <h3>{campaign.name}</h3>}
+            {campaign && <h2>{campaign.name}</h2>}
             <p>
               Introduce information about your business and the goal of the
               campaign and we'll take care of the rest
@@ -101,6 +114,7 @@ const Edit = ({ isConnected }) => {
           </div>
           {campaign && (
             <RadioForm
+              scrollDown={scrollDown}
               campaign={campaign}
               setCampaign={setCampaign}
               isSaving={isSaving}
@@ -113,7 +127,6 @@ const Edit = ({ isConnected }) => {
           campaign.preferences.generatedSamples &&
           campaign.preferences.generatedSamples.length > 0 && (
             <GeneratedSamples
-              
               generatedValues={campaign.preferences.generatedSamples}
               setGeneratedValues={setCampaign}
               resultsRef={resultsRef}

@@ -1,29 +1,40 @@
-/* DropdownComponent.module.css */
-
 .dropdownComponent {
   display: flex;
-  margin-bottom: 1.5rem;
-  padding: 10px;
+  margin-bottom: var(--space-large);
+  padding: var(--space-medium);
+  border-radius: 8px; /* Rounded corners for a softer look */
 }
 
 .title {
   flex: 1;
-  
-  align-self: flex-start; /* Align this item at the start of its flex container */
-  padding: 0.5rem 1rem; /* Adding padding to align content within the container */
+  align-self: flex-start;
+  padding: var(--space-small) var(--space-medium);
+  color: var(--primary-color); /* Consistent text color */
 }
 
 .drop_container {
   flex: 4;
   margin: 0px;
   padding: 0px;
-  
   width: 100%;
 }
 
 .dropdown {
   font-size: 1rem;
-  border: 1px solid #111;
-  padding: 0.5rem;
+  border: 1px solid var(--primary-color); /* Using the primary color variable */
+  padding: var(--space-small);
   width: 40%;
+  border-radius: 4px; /* Consistent rounded borders */
+  background-color: white; /* A clearer background for dropdown */
+  color: var(--primary-color); /* Text color */
+}
+
+.dropdown:hover {
+  background-color: var(--secondary-color); /* Adding a hover effect for better UX */
+}
+
+@media (max-width: 720px) {
+  .dropdown {
+    width: 90%;
+  }
 }

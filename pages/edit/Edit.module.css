@@ -1,41 +1,74 @@
+.feedback {
+  position: fixed; /* Fixed positioning to overlay on top of other content */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the element */
+  padding: 20px 30px;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+  color: white;
+  border-radius: 8px;
+  z-index: 999; /* Ensure it's on top of other elements */
+  opacity: 0; /* Start as invisible to enable fade-in effect */
+  animation: fadeIn 0.5s forwards; /* Animation named 'fadeIn' lasting 0.5s */
+}
+
+/* Animation to fade in */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.home {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.home_button {
+  border: none;
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid rgb(170, 170, 170);
+  background-color: #ffffff;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.home_button:hover {
+  background-color: #757575;
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  /* border: 1px solid; */
+  width: 100%;
+  margin: 40px;
+  padding: 40px;
+}
 
 .header {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem 1.5rem;
+  text-align: center;
+  width: 100%;
 }
 
 .main {
   width: 100vw;
-  /* height: 100vh; */
+  padding: 5rem 3rem;
+  padding-top: 0rem;
+  margin-top: 0px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 5rem 1rem;
   gap: 2rem;
-}
-
-.navbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    border: 1px solid;
-    width: 100%;
-    margin: 40px;
-    padding: 40px;
-}
-
-.userIcon {
-    width: 100px;
-    height: 100px;
-    font-size: 100px;
-}
-
-.header p {
-  color: gray;
 }
 
 .form {
@@ -47,107 +80,67 @@
   border: 1px solid rgb(170, 170, 170);
 }
 
-.header {
-  width: 100%;
-}
-
-.main2 {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 100px;
-}
-
-.header {
-  text-align: center;
-  padding: 1rem;
-}
-
 .items {
   list-style: none;
   display: flex;
   flex-direction: column;
-  
 }
 
-.item {
+.item, .item_clicked {
   background-color: white;
   padding: 2rem;
   border: 1px solid #999;
-  border-top: 0px;
-  transition: margin ease-in-out 0.1s;
-  transition: padding ease-in-out 0.1s;
-  transition: border ease-in-out 0.1s;
+  transition: margin 0.1s ease-in-out, padding 0.1s ease-in-out, border 0.1s ease-in-out, background-color 0.2s;
+  cursor: pointer;
+}
+
+.item:hover, .item_clicked:hover {
+  border: 2px solid #3498db;
+  padding: 2rem 2rem;
 }
 
 .item_clicked {
-  background-color: white;
-  padding: 2rem 2rem;
-  /* margin: 20px; */
-  background-color: #beecbc;
-  border: 1px solid #3c4338;
-  border-top: 0px;
-  cursor: pointer;
-  transition: padding ease-in-out 0.1s;
-  transition: border ease-in-out 0.1s;
+  background-color: #3498db;
+  border: 1px solid #3498db;
 }
 
-.item:hover {
-  background-color: white;
-  padding: 2rem 2rem;
-  border: 2px solid #185316;
-  border-top: 2px solid #185316;
-  cursor: pointer;
-}
-
-.item_clicked:first-of-type {
-  border-top: 1px solid #999;
+.item:first-of-type, .item_clicked:first-of-type {
+  border-top: 2px solid #3498db;
   border-radius: 1rem 1rem 0rem 0rem;
 }
 
-.item_clicked:last-of-type {
-  border-radius: 0rem 0rem 1rem 1rem;
-}
-
-.item:first-of-type {
-  border-top: 1px solid #999;
-  border-radius: 1rem 1rem 0rem 0rem;
-}
-
-.item:first-of-type:hover {
-  border-top: 2px solid #185316;
-  border-radius: 1rem 1rem 0rem 0rem;
-}
-
-.item:last-of-type {
-  border-radius: 0rem 0rem 1rem 1rem;
-}
-
-.item:last-of-type:hover {
-  border-top: 2px solid #185316;
+.item:last-of-type, .item_clicked:last-of-type {
   border-radius: 0rem 0rem 1rem 1rem;
 }
 
 .results {
-  width: 80%;  
+  width: 80%;
 }
 
+@media (max-width: 720px) {
+  .main {
+    flex-direction: column;
+    width: 100%;
+    /* border: 1px solid; */
+    padding: 1rem;
+    padding-bottom: 3rem;
+  }
 
-@media (min-width: 912px) {
-    .form {
-        width: 60%;
-        /* flex: 1; */
-    }
+  .form, .results {
+    width: 90%;
+  }
 
-    .main {
-      flex-direction: row;
-      padding: 5rem 3rem;
-    }
+  .name {
+    font-size: 1.3em;
+    font-weight: 200;
+  }
 
-    .results {
-      width: 60%;
-      /* flex: 2 */
+  .date, .inDepth li, .desc {
+    font-size: 0.8em;
+  }
+
+  .actions button {
+    padding: 6px 10px;
+    font-size: 0.85em;
   }
 }

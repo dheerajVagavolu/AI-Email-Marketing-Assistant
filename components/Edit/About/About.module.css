@@ -1,19 +1,34 @@
-/* About.module.css */
-
 .main {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 10px 25px;
+  gap: var(--space-large);
+  padding: var(--space-medium) var(--space-large);
+  
+  border-radius: 8px;
+}
+
+.main h4 {
+  /* color: var(--primary-color); */
+  padding: 0 var(--space-medium);
 }
 
 .text_input {
+  width: 100%; /* Ensuring full width within the parent container */
   resize: none;
-  padding: 0.5rem;
+  padding: var(--space-medium);
   font-size: 1rem;
   color: #333;
+  border: 1px solid #ccc;
+  border-radius: var(--space-small);
+  transition: border-color 0.2s, box-shadow 0.2s; /* Smooth transitions on focus */
 }
 
-.placeholder {
-  color: #999;
+.text_input:hover {
+  border-color: var(--primary-color-light); /* A lighter shade for the hover effect */
+}
+
+.text_input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 3px var(--primary-color-light); /* Soft glow effect for better focus indication */
+  outline: none; /* Removing default browser outline */
 }
