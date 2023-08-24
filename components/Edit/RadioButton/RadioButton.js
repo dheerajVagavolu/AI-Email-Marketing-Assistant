@@ -3,13 +3,9 @@ import styles from "./RadioButton.module.css";
 const RadioButton = ({
   title,
   options,
-  actionType,
-  dispatch,
+  handleOptionChange,
   selectedOption,
 }) => {
-  const handleOptionChange = (event) => {
-    dispatch({ type: actionType, payload: event.target.value });
-  };
 
   return (
     <div className={styles.main}>
@@ -22,7 +18,7 @@ const RadioButton = ({
               name={title}
               value={option.value}
               checked={selectedOption === option.value}
-              onChange={handleOptionChange}
+              onChange={(e) => handleOptionChange(e.target.value)}
             />
             {option.label}
           </label>

@@ -36,4 +36,15 @@
     background-color: rgb(232, 78, 16);
 }
 
+.optional {
+    display: flex;
+    align-items: center; /* Vertically align checkbox and input */
+    gap: 0.5rem; /* Spacing between child elements */
+}
+
+.optional input[type="text"] {
+    padding: 0.5rem;
+    border-radius: 0.4rem;
+    border: 1px solid #ccc;
+}
 

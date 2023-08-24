@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     client = await connectToDatabase();
     const db = client.db();
 
-    const campaign = await db.collection("campaigns").findOne({ _id: ObjectId(id) });
+    const campaign = await db.collection("campaigns").findOne({ _id: new ObjectId(id) });
 
     if (!campaign) {
       return res.status(404).json({ message: "Campaign not found" });

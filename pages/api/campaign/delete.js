@@ -13,7 +13,6 @@ export default async function handler(req, res) {
     const db = client.db();
 
     
-
     if (req.method === "DELETE") {
       const { _id } = req.body;
 

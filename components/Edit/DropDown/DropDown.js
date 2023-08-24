@@ -4,13 +4,10 @@ import styles from "./DropDown.module.css";
 const DropdownComponent = ({
   title,
   options,
-  dispatch,
-  actionType,
+  handleOptionChange,
   selectedOption,
 }) => {
-  const handleOptionChange = (event) => {
-    dispatch({ type: actionType, payload: event.target.value });
-  };
+  
 
   return (
     <div className={styles.dropdownComponent}>
@@ -19,7 +16,7 @@ const DropdownComponent = ({
         <select
           className={styles.dropdown}
           value={selectedOption}
-          onChange={handleOptionChange}
+          onChange={(e) => handleOptionChange(e.target.value)}
         >
           <option value="">Select an option</option>
           {options.map((option) => (

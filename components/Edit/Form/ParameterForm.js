@@ -5,13 +5,6 @@ import About from "../About/About";
 import Submit from "../Submit/Submit";
 import { useRouter } from "next/router";
 
-const initialState = {
-  campaignGoal: null,
-  brandTone: null,
-  industry: null,
-  description: null,
-};
-
 const options = {
   campaignGoal: [
     { label: "Convince to buy product", value: "Convince to buy product" },
@@ -34,36 +27,51 @@ const options = {
   ],
 };
 
-const reducer = (state, action) => {
-  // alert("Action Was Taken: " + action.type + " " + action.payload);
-  switch (action.type) {
-    case "SET_CAMPAIGN_GOAL":
-      return { ...state, campaignGoal: action.payload };
-    case "SET_BRAND_TONE":
-      return { ...state, brandTone: action.payload };
-    case "SET_INDUSTRY":
-      return { ...state, industry: action.payload };
-    case "SET_DESCRIPTION":
-      return { ...state, description: action.payload };
-    default:
-      return state;
-  }
-};
+const RadioForm = ({ campaign, setCampaign, updateHandler, isSaving }) => {
+  const handleOptionChange = (field, value) => {
+    setCampaign((prevCampaign) => ({
+      ...prevCampaign,
+      preferences: {
+        ...prevCampaign.preferences,
+        [field]: value,
+      },
+    }));
+  };
 
-const RadioForm = ({ setGeneratedValues }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const router = useRouter();
+  const [website, setWebsite] = useState("");
+  const [useWebsite, setUseWebsite] = useState(false);
 
-  const generateCampaign = async () => {
+  const generateCampaign = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
+
+    // Clear out old samples before fetching new ones
+    handleOptionChange("generatedSamples", null);
+
+    try {
+      // alert("useWebsite" + useWebsite);
+      // alert("website" + website);
+      if (useWebsite) {
+        
+        const res = await fetch("/api/personalize/website?url=" + website);
+        const data = await res.json();
+        console.log(data)
+        
+        handleOptionChange("scrapped_website", website);
+        handleOptionChange("scrapped_website_data", data.scrapped_website_data);
+      }
+    } catch (error) {
+      alert("There was an error scraping the website (continuing without personalizing)");
+    }
+
     try {
       const response = await fetch("/api/ai/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(state),
+        body: JSON.stringify(campaign),
       });
 
       if (!response.ok) {
@@ -71,7 +79,11 @@ const RadioForm = ({ setGeneratedValues }) => {
       }
 
       const data = await response.json();
-      setGeneratedValues(data.message);
+      console.log("\n\n\n\n\n\n");
+      console.log(data.message)
+      console.log("\n\n\n\n\n\n");
+      handleOptionChange("generatedSamples", data.message);
+      console.log(data.message);
     } catch (error) {
       alert("There was an error generating the campaign: " + error.message);
     } finally {
@@ -84,28 +96,42 @@ const RadioForm = ({ setGeneratedValues }) => {
       <RadioButton
         title="Campaign Goal"
         options={options.campaignGoal}
-        dispatch={dispatch}
-        actionType="SET_CAMPAIGN_GOAL"
-        selectedOption={state.campaignGoal}
-        // onChange={handleOptionChange("campaignGoal")}
+        selectedOption={campaign.preferences.campaignGoal}
+        handleOptionChange={(value) =>
+          handleOptionChange("campaignGoal", value)
+        }
       />
       <RadioButton
         title="Brand Tone"
         options={options.brandTone}
-        dispatch={dispatch}
-        actionType="SET_BRAND_TONE"
-        selectedOption={state.brandTone}
-        // onChange={handleOptionChange("brandTone")}
+        selectedOption={campaign.preferences.brandTone}
+        handleOptionChange={(value) => handleOptionChange("brandTone", value)}
       />
       <DropdownComponent
         title="Industry"
         options={options.industry}
-        dispatch={dispatch}
-        actionType="SET_INDUSTRY"
-        selectedOption={state.industry}
+        handleOptionChange={(value) => handleOptionChange("industry", value)}
+        selectedOption={campaign.preferences.industry}
       />
-      <About dispatch={dispatch} actionType="SET_DESCRIPTION" />
-      <Submit generateCampaign={generateCampaign} isLoading={isLoading} />
+      <About
+        handleOptionChange={(value) => handleOptionChange("description", value)}
+        saved={campaign.preferences.description}
+      />
+      <Submit
+        isGenerated={
+          true
+            ? campaign.preferences.generatedSamples &&
+              campaign.preferences.generatedSamples.length > 0
+            : false
+        }
+        website={website}
+        setWebsite={setWebsite}
+        setUseWebsite={setUseWebsite}
+        generateCampaign={generateCampaign}
+        isSaving={isSaving}
+        isLoading={isLoading}
+        updateHandler={updateHandler}
+      />
     </div>
   );
 };

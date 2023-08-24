@@ -1,12 +1,30 @@
-import styles from './GeneratedSamples.module.css'
-import { useState } from 'react';
+import styles from "./GeneratedSamples.module.css";
 
-const GeneratedSamples = ({ generatedValues, selectedItem, resultsRef, editSample }) => {
-    
-    
+const GeneratedSamples = ({
+  generatedValues,
+  setGeneratedValues,
+  selectedItem,
+  resultsRef,
+  editSample,
+}) => {
+  const onChangeHandler = (event, index) => {
+    setGeneratedValues((prevState) => {
+      // Deep copy of the current state
+      const newState = JSON.parse(JSON.stringify(prevState));
+
+      // Update the body content of the particular sample
+      newState.preferences.generatedSamples[index].body = event.target.value;
+
+      return newState;
+    });
+  };
+
+  // Utility function to count the number of lines in a string
+  
+
   return (
     <>
-      {generatedValues.length !== 0 && (
+      {generatedValues && generatedValues.length !== 0 && (
         <div className={styles.results} ref={resultsRef}>
           <div className={styles.header}>
             <h1>Generated Campagins</h1>
@@ -17,14 +35,16 @@ const GeneratedSamples = ({ generatedValues, selectedItem, resultsRef, editSampl
             {generatedValues.map((item, num) => (
               <li
                 key={num}
-                // Apply styles.item_clicked if this item is the selected one, otherwise apply styles.item
                 className={
                   num === selectedItem ? styles.item_clicked : styles.item
                 }
                 onClick={() => editSample(item, num)}
               >
-                <p>{item.subject}</p>
-                <p>{item.body}</p>
+                <textarea
+                  className={styles.sample}
+                  defaultValue={item.body}
+                  onChange={(e) => onChangeHandler(e, num)}
+                />
               </li>
             ))}
           </ul>

@@ -49,7 +49,7 @@ const Home = ({ data }) => {
       <div className={styles.campaigns}>
         <div className={styles.existing}>
           {data.map((item) => (
-            <Example item={item}/>
+            <Example item={item} key={item._id}/>
           ))}
         </div>
         <div className={styles.add}>
