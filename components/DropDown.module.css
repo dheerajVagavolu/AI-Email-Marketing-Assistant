@@ -1,0 +1,29 @@
+/* DropdownComponent.module.css */
+
+.dropdownComponent {
+  display: flex;
+  margin-bottom: 1.5rem;
+  padding: 10px;
+}
+
+.title {
+  flex: 1;
+  
+  align-self: flex-start; /* Align this item at the start of its flex container */
+  padding: 0.5rem 1rem; /* Adding padding to align content within the container */
+}
+
+.drop_container {
+  flex: 4;
+  margin: 0px;
+  padding: 0px;
+  
+  width: 100%;
+}
+
+.dropdown {
+  font-size: 1rem;
+  border: 1px solid #111;
+  padding: 0.5rem;
+  width: 40%;
+}

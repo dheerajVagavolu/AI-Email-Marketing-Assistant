@@ -1,0 +1,93 @@
+/* Root Container */
+.main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    background-color: #f5f5f5;
+}
+
+/* Navigation Bar */
+.navbar {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar li {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.navbar li:hover {
+    color: #0077b6; /* Change this to any color you want */
+}
+
+/* Campaigns Container */
+.campaigns {
+    width: 80%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add input {
+    padding: 5px 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    margin-right: 10px; /* To give space between input and button */
+}
+
+/* Existing Campaigns */
+.existing {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.example ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Add Campaigns Button */
+.add {
+    position: relative;
+    padding: 1rem;
+}
+
+.add button {
+    background-color: #4caf50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add button:hover {
+    background-color: #45a049; /* Darker green */
+}
+

@@ -1,0 +1,39 @@
+.main {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.save_button {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 1.2rem 2rem;
+    border-radius: 0.8rem;
+    border: none;
+    background-color: rgb(155, 206, 130);
+    
+    color: white;
+}
+
+.save_button:hover {
+    cursor: pointer;
+    background-color: rgb(83, 159, 46);
+}
+
+.button {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1.5rem 2.5rem;
+    border-radius: 0.8rem;
+    border: none;
+    background-color: rgb(228, 137, 101);
+    
+    color: white;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: rgb(232, 78, 16);
+}
+
+

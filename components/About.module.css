@@ -1,0 +1,19 @@
+/* About.module.css */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 10px 25px;
+}
+
+.text_input {
+  resize: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.placeholder {
+  color: #999;
+}
