@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 
 async function connectToDatabase() {
   const client = await MongoClient.connect(
-    "mongodb+srv://root:UWbZIO78Mo7g3ild@recommender.i5wpqnw.mongodb.net/?retryWrites=true&w=majority"
+    process.env.MongoDB_URL
   );
   return client;
 }
