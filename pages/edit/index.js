@@ -1,5 +1,5 @@
-import RadioForm from "@/components/ParameterForm";
-import styles from "./Campaign.module.css";
+import RadioForm from "@/components/Edit/Form/ParameterForm";
+import styles from "./Edit.module.css";
 
 import {
   ClerkProvider,
@@ -10,8 +10,9 @@ import {
 } from "@clerk/nextjs";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
+import GeneratedSamples from "@/components/Edit/GeneratedSamples/GeneratedSamples";
 
-const Campaign = ({ isConnected }) => {
+const Edit = ({ isConnected }) => {
   const [generatedValues, setGeneratedValues] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const resultsRef = useRef(null);
@@ -28,16 +29,16 @@ const Campaign = ({ isConnected }) => {
 
   const router = useRouter();
 
-  const selectEmail = (value, index) => {
-    localStorage.setItem("selectedEmailBody", value.body);
-    localStorage.setItem("selectedEmailSubject", value.subject);
-    const storedEmail = localStorage.getItem("selectedEmailBody");
+  const editSample = (value, index) => {
+    // localStorage.setItem("selectedEmailBody", value.body);
+    // localStorage.setItem("selectedEmailSubject", value.subject);
+    // const storedEmail = localStorage.getItem("selectedEmailBody");
     setSelectedItem(index);
-    if (storedEmail) {
-      router.push("/send");
-    } else {
-      alert("Some Error Occurred!");
-    }
+    // if (storedEmail) {
+    //   router.push("/");
+    // } else {
+    //   alert("Some Error Occurred!");
+    // }
   };
 
   const handleGeneratedValues = (values) => {
@@ -60,30 +61,12 @@ const Campaign = ({ isConnected }) => {
           <RadioForm setGeneratedValues={handleGeneratedValues} />
         </div>
 
-        {generatedValues.length !== 0 && (
-          <div className={styles.results} ref={resultsRef}>
-            <div className={styles.header}>
-              <h1>Generated Campagins</h1>
-              <p>Choose One</p>
-            </div>
-
-            <ul className={styles.items}>
-              {generatedValues.map((item, num) => (
-                <li
-                  key={num}
-                  // Apply styles.item_clicked if this item is the selected one, otherwise apply styles.item
-                  className={
-                    num === selectedItem ? styles.item_clicked : styles.item
-                  }
-                  onClick={() => selectEmail(item, num)}
-                >
-                  <p>{item.subject}</p>
-                  <p>{item.body}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <GeneratedSamples
+          generatedValues={generatedValues}
+          resultsRef={resultsRef}
+          selectedItem={selectedItem}
+          editSample={editSample}
+        />
       </div>
     </>
   );
@@ -97,4 +80,4 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default Campaign;
+export default Edit;

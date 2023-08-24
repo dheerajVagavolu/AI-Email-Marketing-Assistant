@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import styles from "./index.module.css";
-import Example from "@/components/campaign/Example";
+import Example from "@/components/Home/Example/Example";
 
 import { useEffect, useState } from "react";
 

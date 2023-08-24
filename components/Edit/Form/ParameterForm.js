@@ -1,8 +1,8 @@
 import React, { useState, useReducer } from "react";
-import RadioButton from "./RadioButton";
-import DropdownComponent from "./DropDown";
-import About from "./About";
-import Submit from "./Submit";
+import RadioButton from "../RadioButton/RadioButton";
+import DropdownComponent from "../DropDown/DropDown";
+import About from "../About/About";
+import Submit from "../Submit/Submit";
 import { useRouter } from "next/router";
 
 const initialState = {
