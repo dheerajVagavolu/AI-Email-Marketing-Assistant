@@ -5,7 +5,7 @@ import Example from "@/components/Home/Example/Example";
 import { useEffect, useState } from "react";
 
 const fetchCampaigns = async () => {
-  const dataJson = await fetch("http://localhost:3000/api/campaign/getAll");
+  const dataJson = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/campaign/getAll");
   const data = await dataJson.json();
 
   console.log(data);
@@ -20,7 +20,7 @@ const createCampaign = async (
   preferences = { date: new Date().toLocaleString("en-US") }
 ) => {
   try {
-    const response = await fetch("/api/campaign/create", {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/campaign/create", {
       // replace 'path_to_your_handler' with the correct path
       method: "POST",
       headers: {
@@ -71,7 +71,7 @@ const Home = ({ data }) => {
   const handleDeleteCampaign = async (_id) => {
     setIsDeleting(true);
     try {
-      const response = await fetch("/api/campaign/delete", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/campaign/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
