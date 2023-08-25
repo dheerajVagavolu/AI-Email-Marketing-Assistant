@@ -71,7 +71,7 @@ const RadioForm = ({
       // alert("useWebsite" + useWebsite);
       // alert("website" + website);
       if (useWebsite) {
-        const res = await fetch("/api/personalize/website?url=" + website);
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/personalize/website?url=" + website);
         const data = await res.json();
         console.log(data);
 

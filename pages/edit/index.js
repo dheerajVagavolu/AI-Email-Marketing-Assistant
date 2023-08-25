@@ -14,7 +14,7 @@ const Edit = () => {
   async function updateHandler(_id) {
     try {
       setIsSaving(true);
-      const response = await fetch("/api/campaign/update", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/campaign/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const Edit = () => {
     async function fetchCampaign() {
       try {
         const response = await fetch(
-          `/api/campaign/getOne?id=${router.query._id}`
+          process.env.NEXT_PUBLIC_API_URL + `/api/campaign/getOne?id=${router.query._id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch campaign");
