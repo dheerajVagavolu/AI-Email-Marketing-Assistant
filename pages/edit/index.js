@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import GeneratedSamples from "@/components/Edit/GeneratedSamples/GeneratedSamples";
 
-const Edit = ({ isConnected }) => {
+const Edit = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const resultsRef = useRef(null);
   const [campaign, setCampaign] = useState(null);
@@ -138,13 +138,5 @@ const Edit = ({ isConnected }) => {
     </>
   );
 };
-
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      isConnected: false,
-    },
-  };
-}
 
 export default Edit;

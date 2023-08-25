@@ -144,7 +144,7 @@ const Home = ({ data }) => {
 };
 
 export async function getServerSideProps() {
-  const dataJson = await fetch("http://localhost:3000/api/campaign/getAll");
+  const dataJson = await fetch(process.env.NEXT_PUBLIC_API_URL+"/api/campaign/getAll");
   const data = await dataJson.json();
 
   console.log(data);
