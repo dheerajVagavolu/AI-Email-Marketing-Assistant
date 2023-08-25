@@ -18,7 +18,7 @@
       opacity: 1;
     }
   }
-  
+
 .main {
     width: 100vw;
     height: 100vh;
@@ -65,7 +65,8 @@
 }
 
 .add input {
-    padding: 5px 10px;
+    padding: 10px 10px;
+    font-size: 1rem;
     border: 1px solid #dcdcdc;
     border-radius: 5px;
     margin-right: 10px; /* To give space between input and button */
