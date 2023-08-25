@@ -113,11 +113,13 @@ const RadioForm = ({
       // console.log("\n\n\n\n\n\n");
       // console.log(data.message)
       // console.log("\n\n\n\n\n\n");
-      handleOptionChange("generatedSamples", data.message);
+      await handleOptionChange("generatedSamples", data.message);
       console.log(data.message);
+      // await updateHandler();
 
       setTimeout(() => {
         scrollDown();
+        updateHandler();
       }, 1000);
     } catch (error) {
       alert("There was an error generating the campaign: " + error.message);

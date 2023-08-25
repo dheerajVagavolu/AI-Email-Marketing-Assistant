@@ -13,7 +13,11 @@ const Submit = ({
   return (
     <>
       <div className={styles.main}>
-        <button className={styles.save_button} onClick={updateHandler} disabled={isSaving && isLoading}>
+        <button
+          className={styles.save_button}
+          onClick={updateHandler}
+          disabled={isSaving && isLoading}
+        >
           {isSaving ? " ... " : "Save"}
         </button>
 
@@ -26,10 +30,20 @@ const Submit = ({
               setWebsite(e.target.value);
             }}
           ></input>
-          <input type="checkbox" disabled={website === ""} onChange={(e) => setUseWebsite(e.target.checked)}/>
+          <input
+            type="checkbox"
+            disabled={website === ""}
+            onChange={(e) => setUseWebsite(e.target.checked)}
+          />
         </div>
 
-        <button className={styles.button} onClick={generateCampaign} disabled={isSaving && isLoading}>
+        <button
+          className={styles.button}
+          onClick={async (e) => {
+            await generateCampaign(e);
+          }}
+          disabled={isSaving && isLoading}
+        >
           {isLoading
             ? " ... "
             : isGenerated
