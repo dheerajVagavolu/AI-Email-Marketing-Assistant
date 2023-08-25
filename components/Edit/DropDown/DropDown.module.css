@@ -1,8 +1,9 @@
 .dropdownComponent {
   display: flex;
-  margin-bottom: var(--space-large);
+  /* margin-bottom: var(--space-large); */
   padding: var(--space-medium);
   border-radius: 8px; /* Rounded corners for a softer look */
+  
 }
 
 .title {

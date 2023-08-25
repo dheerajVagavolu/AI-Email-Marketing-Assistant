@@ -20,7 +20,8 @@ const Submit = ({
         <div className={styles.optional}>
           <input
             type="text"
-            placeholder="Enter website"
+            placeholder="Use Website"
+            className={styles.website_name}
             onChange={(e) => {
               setWebsite(e.target.value);
             }}

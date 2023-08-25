@@ -22,7 +22,7 @@ const createPrompt = (campaign) => {
 
   let toneText =
     campaign.preferences.website && campaign.preferences.scrapped_website_data
-      ? `Ensure that the emails adopt a tone inspired by the website ${campaign.preferences.website}. For reference, the website contains: ${campaign.preferences.scrapped_website_data}.\n`
+      ? `Ensure that the emails adopt a tone personalized for the user. This text contains language patterns of the target user: ${campaign.preferences.scrapped_website_data}.\n`
       : "";
 
   return `For the Marketing Campaign titled "${campaign.name}", generate 5 distinct emails. ${description}${toneText}Given the below preferences, each email should have a subject and a body (under 10 lines each). Strictly use the following structure for each email:
@@ -30,7 +30,7 @@ const createPrompt = (campaign) => {
 
 {body}
 
-Separate each email with '---'. Refrain from using numbers, Email 1:, bullets, or quotations in the content.
+Separate each email with '---'. Refrain from using numbers, dont use pre-cursor Email 1:, bullets, or quotations in the content.
 
 Preferences:
 ${preferencesText}`;

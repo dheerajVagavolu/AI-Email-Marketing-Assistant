@@ -16,14 +16,21 @@ export default async function handler(req, res) {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
-    const paragraphs = [];
-    $("p").each((index, element) => {
-      if ($(element).text().split(" ").length > 2) {
-        paragraphs.push($(element).text());
-      }
+    const contents = [];
+
+    // Collect text from common elements
+    const selectors = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "blockquote"];
+
+    selectors.forEach(selector => {
+      $(selector).each((index, element) => {
+        const text = $(element).text().trim();
+        if (text.split(" ").length > 3) {
+          contents.push(text);
+        }
+      });
     });
 
-    return res.send({ scrapped_website_data: paragraphs.join(" | ") });
+    return res.send({ scrapped_website_data: contents.join(" | ") });
   } catch (error) {
     console.error(`Error scraping ${url}:`, error.message);
     return res.status(500).send({ error: "Failed to scrape the website." });

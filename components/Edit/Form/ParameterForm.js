@@ -1,4 +1,4 @@
-import styles from './ParameterForm.module.css'
+import styles from "./ParameterForm.module.css";
 import React, { useState, useReducer } from "react";
 import RadioButton from "../RadioButton/RadioButton";
 import DropdownComponent from "../DropDown/DropDown";
@@ -14,8 +14,14 @@ const options = {
     { label: "Share product updates", value: "Share product updates" },
     { label: "Increase brand awareness", value: "Increase brand awareness" },
     { label: "Grow email subscribers", value: "Grow email subscribers" },
-    { label: "Promote an event or webinar", value: "Promote an event or webinar" },
-    { label: "Increase social media engagement", value: "Increase social media engagement" },
+    {
+      label: "Promote an event or webinar",
+      value: "Promote an event or webinar",
+    },
+    {
+      label: "Increase social media engagement",
+      value: "Increase social media engagement",
+    },
   ],
   brandTone: [
     { label: "Formal", value: "Formal" },
@@ -37,7 +43,6 @@ const options = {
     { label: "Food and Beverage", value: "Food and Beverage" },
   ],
 };
-
 
 const RadioForm = ({
   scrollDown,
@@ -71,7 +76,11 @@ const RadioForm = ({
       // alert("useWebsite" + useWebsite);
       // alert("website" + website);
       if (useWebsite) {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/personalize/website?url=" + website);
+        const res = await fetch(
+          process.env.NEXT_PUBLIC_API_URL +
+            "/api/personalize/website?url=" +
+            website
+        );
         const data = await res.json();
         console.log(data);
 
@@ -85,13 +94,16 @@ const RadioForm = ({
     }
 
     try {
-      const response = await fetch("/api/ai/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(campaign),
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/api/ai/generate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(campaign),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -116,30 +128,36 @@ const RadioForm = ({
 
   return (
     <div>
+      {isSaving && <div className={styles.feedback}>Saving</div>}
 
-    {isSaving && <div className={styles.feedback}>Saving</div>}
-    {isLoading && <div className={styles.feedback}>Generating</div>}
+      {isLoading && (
+        <div className={styles.feedback}>Generating</div>
+      )}
 
-      <RadioButton
-        title="Campaign Goal"
-        options={options.campaignGoal}
-        selectedOption={campaign.preferences.campaignGoal}
-        handleOptionChange={(value) =>
-          handleOptionChange("campaignGoal", value)
-        }
-      />
-      <RadioButton
-        title="Brand Tone"
-        options={options.brandTone}
-        selectedOption={campaign.preferences.brandTone}
-        handleOptionChange={(value) => handleOptionChange("brandTone", value)}
-      />
-      <DropdownComponent
-        title="Industry"
-        options={options.industry}
-        handleOptionChange={(value) => handleOptionChange("industry", value)}
-        selectedOption={campaign.preferences.industry}
-      />
+      <div className={styles.dropdown_options}>
+        <DropdownComponent
+          title="Campaign Goal"
+          options={options.campaignGoal}
+          selectedOption={campaign.preferences.campaignGoal}
+          handleOptionChange={(value) =>
+            handleOptionChange("campaignGoal", value)
+          }
+        />
+        <DropdownComponent
+          title="Brand Tone"
+          options={options.brandTone}
+          selectedOption={campaign.preferences.brandTone}
+          handleOptionChange={(value) => handleOptionChange("brandTone", value)}
+        />
+
+        <DropdownComponent
+          title="Industry"
+          options={options.industry}
+          handleOptionChange={(value) => handleOptionChange("industry", value)}
+          selectedOption={campaign.preferences.industry}
+        />
+      </div>
+
       <About
         handleOptionChange={(value) => handleOptionChange("description", value)}
         saved={campaign.preferences.description}
