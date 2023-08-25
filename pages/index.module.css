@@ -64,13 +64,7 @@
     align-items: center;
 }
 
-.add input {
-    padding: 10px 10px;
-    font-size: 1rem;
-    border: 1px solid #dcdcdc;
-    border-radius: 5px;
-    margin-right: 10px; /* To give space between input and button */
-}
+
 
 /* Existing Campaigns */
 .existing {
@@ -91,12 +85,14 @@
 /* Add Campaigns Button */
 .add {
     position: relative;
+    display: flex;
     padding: 1rem;
 }
 
 .add button {
     background-color: #4caf50; /* Green */
     border: none;
+    flex: 1;
     color: white;
     padding: 10px 15px;
     text-align: center;
@@ -106,6 +102,15 @@
     border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.add input {
+    padding: 10px 10px;
+    font-size: 1rem;
+    flex: 2;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    margin-right: 10px; /* To give space between input and button */
 }
 
 .add button:hover {
