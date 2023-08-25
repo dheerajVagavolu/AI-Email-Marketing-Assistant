@@ -11,7 +11,7 @@ const About = ({handleOptionChange,saved}) => {
         <textarea
           rows="10"
           name="description"
-          placeholder="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus perspiciatis commodi ipsam maxime libero illum ex quaerat aliquid odit tempore cum sunt necessitatibus eum asperiores facilis nam, veritatis ipsum deserunt?"
+          placeholder="(Ex. what is the goal? what is the expected result?)"
           defaultValue={saved ? saved : ""}
           className={styles.text_input}
           onChange={(e) => handleOptionChange(e.target.value)}
