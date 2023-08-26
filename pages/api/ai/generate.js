@@ -1,8 +1,13 @@
 // configure dotenv
 require("dotenv").config();
-
+import { MongoClient, ObjectId } from "mongodb";
 // import modules from OpenAI library
 import OpenAI from "openai";
+
+async function connectToDatabase() {
+  const client = await MongoClient.connect(process.env.MONGODB_URI);
+  return client;
+}
 
 const createPrompt = (campaign) => {
   let preferencesText = "";
@@ -10,7 +15,11 @@ const createPrompt = (campaign) => {
   // Extract preferences, ignoring certain keys
   if (campaign.preferences && typeof campaign.preferences === "object") {
     for (let [key, value] of Object.entries(campaign.preferences)) {
-      if (!["description", "website", "scrapped_website_data"].includes(key)) {
+      if (
+        !["description", "website", "websiteData", "useWebsiteData"].includes(
+          key
+        )
+      ) {
         preferencesText += `- ${key}: ${value}\n`;
       }
     }
@@ -21,16 +30,18 @@ const createPrompt = (campaign) => {
     : "";
 
   let toneText =
-    campaign.preferences.website && campaign.preferences.scrapped_website_data
+    campaign.preferences.useWebsiteData &&
+    campaign.preferences.website &&
+    campaign.preferences.scrapped_website_data
       ? `Ensure that the emails adopt a tone personalized for the user. This text contains language patterns of the target user: ${campaign.preferences.scrapped_website_data}.\n`
       : "";
 
   return `For the Marketing Campaign titled "${campaign.name}", generate 5 distinct emails. ${description}${toneText}Given the below preferences, each email should have a subject and a body (under 10 lines each). Strictly use the following structure for each email:
-{subject}
+{num}: Subject: {subject}
 
-{body}
+Body: {body}
 
-Separate each email with '---'. Refrain from using numbers, dont use pre-cursor Email 1:, bullets, or quotations in the content.
+Separate each email with '---'. Refrain from using numbers, bullets, or quotations in the content.
 
 Preferences:
 ${preferencesText}`;
@@ -43,54 +54,61 @@ const createResponse = (message) => {
     .filter((emailObj) => emailObj.body !== ""); // Remove objects with empty 'body' value
 };
 
-// const demo = [
-//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
-//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
-//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
-//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
-//   {'body': "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, eum tenetur voluptates sed molestiae corporis eligendi laboriosam maiores praesentium laudantium at eveniet! Provident autem in dolores vero. Voluptas, mollitia fuga."},
-// ]
-
-// export default async function handler(req, res) {
-//   if (req.method === "POST") {
-
-//     return res.status(200).json({ message: demo });
-//   } else {
-//     return res.status(405).end(); // Method Not Allowed if not a POST request.
-//   }
-// }
-
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    // Process a POST request
-    // const { campaignGoal, brandTone, industry } = req.body;
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const prompt = createPrompt(req.body);
+    let client;
 
-    console.log(prompt);
+    try {
+      client = await connectToDatabase();
+      const db = client.db();
 
-    if (prompt == null) {
-      throw new Error("Uh oh, no prompt was provided");
+      const { _id } = req.body;
+
+      if (!_id) {
+        return res
+          .status(400)
+          .json({ message: "ID is required for generation" });
+      }
+      const campaign = await db
+        .collection("campaigns")
+        .findOne({ _id: new ObjectId(_id) });
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+
+      const prompt = createPrompt(campaign);
+
+      
+
+      if (prompt == null) {
+        throw new Error("Uh oh, no prompt was provided");
+      }
+
+      const res_ai = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "gpt-3.5-turbo",
+      });
+
+      // retrieve the completion text from response
+      const completion = res_ai.choices[0].message.content;
+
+      const response = createResponse(completion);
+
+      return res.status(200).json(response);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Internal Server Error", error: error.message });
+    } finally {
+      if (client) {
+        client.close();
+      }
     }
-
-    const res_ai = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "gpt-3.5-turbo",
-    });
-
-    console.log(res_ai);
-
-    console.log(res_ai.choices);
-
-    // retrieve the completion text from response
-    const completion = res_ai.choices[0].message.content;
-
-    const response = createResponse(completion);
-
-    return res.status(200).json({ message: response });
   } else {
     return res.status(405).end(); // Method Not Allowed if not a POST request.
   }

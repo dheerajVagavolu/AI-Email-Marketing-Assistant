@@ -3,43 +3,19 @@ import styles from "./Example.module.css";
 import { useState } from "react";
 
 const Example = ({ item, onDelete }) => {
-  const [clicked, setclicked] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // const deleteHandler = async (_id) => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await fetch("/api/campaign/delete", {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ _id }),
-  //     });
-
-  //     if (!response.ok) {
-  //       const responseData = await response.json();
-  //       console.error(
-  //         `Error deleting item: ${responseData.message || "Unknown error"}`
-  //       );
-  //       return;
-  //     }
-
-  //     console.log(`Successfully deleted item with _id: ${_id}`);
-
-  //     // Optionally, you could refresh the data or redirect the user
-  //     // e.g., router.push("/path_to_redirect_after_deletion");
-  //     router.push("/");
-  //   } catch (error) {
-  //     console.error(`Error deleting item with _id: ${_id}`, error);
-  //   } finally {
-  //     // setLoading(false);
-  //   }
-  // };
-
   return (
-    <div className={styles.example} onClick={() => setclicked(!clicked)}>
+    <div
+      className={styles.example}
+      onClick={() =>
+        router.push({
+          pathname: "/edit",
+          query: { _id: item._id },
+        })
+      }
+    >
       {loading && <div className={styles.loading}>Deleting...</div>}
       {!loading && (
         <header className={styles.header}>
@@ -47,31 +23,22 @@ const Example = ({ item, onDelete }) => {
             <h2 className={styles.name}>{item.name}</h2>
             <span className={styles.date}>{item.preferences.date}</span>
           </div>
-          <div className={styles.actions}>
-            
-            <button
-              onClick={() =>
-                router.push({
-                  pathname: "/edit",
-                  query: { _id: item._id },
-                })
-              }
-            >
-              Edit
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(item._id);
-            }}
-            >
-              Delete
-            </button>
-          </div>
+          {onDelete && (
+            <div className={styles.actions}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(item._id);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </header>
       )}
 
-      {!loading && clicked && (
+      {!loading && (
         <div className={styles.info}>
           <ul className={styles.inDepth}>
             <li>

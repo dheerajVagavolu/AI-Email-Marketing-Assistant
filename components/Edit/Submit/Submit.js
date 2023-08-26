@@ -41,6 +41,9 @@ const Submit = ({
           className={styles.button}
           onClick={async (e) => {
             await generateCampaign(e);
+            setTimeout(() => {
+              updateHandler();
+            }, 1000);
           }}
           disabled={isSaving && isLoading}
         >

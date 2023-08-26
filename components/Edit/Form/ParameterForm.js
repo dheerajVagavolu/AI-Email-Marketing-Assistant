@@ -4,6 +4,7 @@ import RadioButton from "../RadioButton/RadioButton";
 import DropdownComponent from "../DropDown/DropDown";
 import About from "../About/About";
 import Submit from "../Submit/Submit";
+import { getDataFromEmails } from "@/utils/email";
 
 const options = {
   campaignGoal: [
@@ -45,9 +46,10 @@ const options = {
 };
 
 const RadioForm = ({
-  scrollDown,
   campaign,
   setCampaign,
+  setIsSaving,
+  _id,
   updateHandler,
   isSaving,
 }) => {
@@ -65,6 +67,85 @@ const RadioForm = ({
   const [website, setWebsite] = useState("");
   const [useWebsite, setUseWebsite] = useState(false);
 
+  // const getWebsiteData = async () => {
+  //   try {
+  //     if (useWebsite) {
+  //       const res = await fetch(
+  //         process.env.NEXT_PUBLIC_API_URL +
+  //           "/api/personalize/website?url=" +
+  //           website
+  //       );
+  //       const data = await res.json();
+  //       console.log(data);
+  //       return {
+  //         website,
+  //         websiteData,
+  //       };
+  //     }
+  //   } catch (error) {
+  //     alert(
+  //       "There was an error scraping the website (continuing without personalizing)"
+  //     );
+  //     return null;
+  //   }
+  // };
+
+  // const createHelper = async (campaign) => {
+  //   try {
+  //     const response = await fetch(
+  //       process.env.NEXT_PUBLIC_API_URL + "/api/ai/generate",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(campaign),
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+
+  //     const data = await response.json();
+
+  //     return {
+  //       data: data.message,
+  //     };
+  //   } catch (error) {
+  //     alert("There was an error generating the campaign: " + error.message);
+  //     return null;
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // const generateCampaign = async (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+
+  //   await setCampaign(async (prev) => {
+  //     // handleOptionChange("generatedSamples", null);
+  //     const websiteDataObject = await getWebsiteData();
+  //     const generateData = await createHelper(prev);
+
+  //     return {
+  //       ...prev,
+  //       preferences: {
+  //         ...prev.preferences,
+  //         scrapped_website: websiteDataObject ? websiteDataObject.website : null,
+  //         scrapped_website_data: websiteDataObject ? websiteDataObject.websiteData : null,
+  //         generatedSamples: generateData ? generateData.data : null,
+  //       },
+  //     };
+  //   });
+
+  //   setIsSaving(true);
+  //   await updateHandler(_id, campaign);
+  //   setIsSaving(false);
+
+  // };
+
   const generateCampaign = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -73,8 +154,6 @@ const RadioForm = ({
     handleOptionChange("generatedSamples", null);
 
     try {
-      // alert("useWebsite" + useWebsite);
-      // alert("website" + website);
       if (useWebsite) {
         const res = await fetch(
           process.env.NEXT_PUBLIC_API_URL +
@@ -101,7 +180,7 @@ const RadioForm = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(campaign),
+          body: JSON.stringify({ _id: campaign._id }),
         }
       );
 
@@ -110,20 +189,25 @@ const RadioForm = ({
       }
 
       const data = await response.json();
-      // console.log("\n\n\n\n\n\n");
-      // console.log(data.message)
-      // console.log("\n\n\n\n\n\n");
-      await handleOptionChange("generatedSamples", data.message);
-      console.log(data.message);
-      // await updateHandler();
 
-      setTimeout(() => {
-        scrollDown();
-        updateHandler();
+      await handleOptionChange("generatedSamples", data);
+      setIsLoading(false);
+      // console.log(data);
+
+      const emailData = await getDataFromEmails(campaign._id, data);
+      console.log("Email Data: " + emailData);
+      await handleOptionChange("emailData", emailData);
+      
+
+      setTimeout(async () => {
+        setIsSaving(true);
+        await updateHandler(_id, campaign.name, campaign.preferences);
+        setIsSaving(false);
       }, 1000);
     } catch (error) {
       alert("There was an error generating the campaign: " + error.message);
     } finally {
+      setIsSaving(false);
       setIsLoading(false);
     }
   };
@@ -132,53 +216,68 @@ const RadioForm = ({
     <div>
       {isSaving && <div className={styles.feedback}>Saving</div>}
 
-      {isLoading && (
-        <div className={styles.feedback}>Generating</div>
+      {isLoading && <div className={styles.feedback}>Generating</div>}
+
+      {campaign.preferences && (
+        <div className={styles.dropdown_options}>
+          <DropdownComponent
+            title="Campaign Goal"
+            options={options.campaignGoal}
+            selectedOption={campaign.preferences.campaignGoal}
+            handleOptionChange={(value) =>
+              handleOptionChange("campaignGoal", value)
+            }
+          />
+          <DropdownComponent
+            title="Brand Tone"
+            options={options.brandTone}
+            selectedOption={campaign.preferences.brandTone}
+            handleOptionChange={(value) =>
+              handleOptionChange("brandTone", value)
+            }
+          />
+
+          <DropdownComponent
+            title="Industry"
+            options={options.industry}
+            handleOptionChange={(value) =>
+              handleOptionChange("industry", value)
+            }
+            selectedOption={campaign.preferences.industry}
+          />
+        </div>
       )}
 
-      <div className={styles.dropdown_options}>
-        <DropdownComponent
-          title="Campaign Goal"
-          options={options.campaignGoal}
-          selectedOption={campaign.preferences.campaignGoal}
+      {campaign.preferences && (
+        <About
           handleOptionChange={(value) =>
-            handleOptionChange("campaignGoal", value)
+            handleOptionChange("description", value)
           }
+          saved={campaign.preferences.description}
         />
-        <DropdownComponent
-          title="Brand Tone"
-          options={options.brandTone}
-          selectedOption={campaign.preferences.brandTone}
-          handleOptionChange={(value) => handleOptionChange("brandTone", value)}
-        />
+      )}
 
-        <DropdownComponent
-          title="Industry"
-          options={options.industry}
-          handleOptionChange={(value) => handleOptionChange("industry", value)}
-          selectedOption={campaign.preferences.industry}
+      {campaign.preferences && (
+        <Submit
+          isGenerated={
+            true
+              ? campaign.preferences.generatedSamples &&
+                campaign.preferences.generatedSamples.length > 0
+              : false
+          }
+          website={website}
+          setWebsite={setWebsite}
+          setUseWebsite={setUseWebsite}
+          generateCampaign={generateCampaign}
+          isSaving={isSaving}
+          isLoading={isLoading}
+          updateHandler={async () => {
+            setIsSaving(true);
+            await updateHandler(_id, campaign.name, campaign.preferences);
+            setIsSaving(false);
+          }}
         />
-      </div>
-
-      <About
-        handleOptionChange={(value) => handleOptionChange("description", value)}
-        saved={campaign.preferences.description}
-      />
-      <Submit
-        isGenerated={
-          true
-            ? campaign.preferences.generatedSamples &&
-              campaign.preferences.generatedSamples.length > 0
-            : false
-        }
-        website={website}
-        setWebsite={setWebsite}
-        setUseWebsite={setUseWebsite}
-        generateCampaign={generateCampaign}
-        isSaving={isSaving}
-        isLoading={isLoading}
-        updateHandler={updateHandler}
-      />
+      )}
     </div>
   );
 };

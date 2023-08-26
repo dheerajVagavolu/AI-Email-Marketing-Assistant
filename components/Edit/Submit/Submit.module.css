@@ -2,7 +2,6 @@
   display: flex;
   justify-content: space-between;
   padding: var(--space-medium);
-
   border-radius: 8px;
 }
 
@@ -10,8 +9,8 @@
 .button {
   font-size: 1rem;
   font-weight: bold;
-  padding: var(--space-medium) var(--space-large);
-  border-radius: var(--space-medium);
+  padding: var(--space-small) var(--space-medium);
+  border-radius: var(--space-small);
   border: none;
   transition: background-color 0.2s; /* Smooth transition on hover */
   cursor: pointer;
@@ -19,7 +18,7 @@
 }
 
 .save_button {
-  background-color: rgb(155, 206, 130);
+  background-color: rgb(72, 97, 59);
   color: white;
 }
 
@@ -30,7 +29,7 @@
 
 .button {
   font-size: 1rem;
-  background-color: rgb(228, 137, 101);
+  background-color: rgb(146, 87, 64);
   color: white;
 }
 

@@ -1,120 +1,90 @@
 .feedback {
-    position: fixed; /* Fixed positioning to overlay on top of other content */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Center the element */
-    padding: 20px 30px;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
-    color: white;
-    border-radius: 8px;
-    z-index: 999; /* Ensure it's on top of other elements */
-    opacity: 0; /* Start as invisible to enable fade-in effect */
-    animation: fadeIn 0.5s forwards; /* Animation named 'fadeIn' lasting 0.5s */
+  position: fixed; /* Fixed positioning to overlay on top of other content */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the element */
+  padding: 20px 30px;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+  color: white;
+  border-radius: 8px;
+  z-index: 999; /* Ensure it's on top of other elements */
+  opacity: 0; /* Start as invisible to enable fade-in effect */
+  animation: fadeIn 0.5s forwards; /* Animation named 'fadeIn' lasting 0.5s */
+}
+
+/* Animation to fade in */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
-  
-  /* Animation to fade in */
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-    }
-  }
+}
 
 .main {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    background-color: #f5f5f5;
-}
-
-/* Navigation Bar */
-.navbar {
-    width: 80%;
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 0;
-    border-bottom: 1px solid #dcdcdc;
-}
-
-.navbar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 20px;
-}
-
-.navbar li {
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.navbar li:hover {
-    color: #0077b6; /* Change this to any color you want */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  background-color: #f5f5f5;
 }
 
 /* Campaigns Container */
 .campaigns {
-    width: 80%;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 80%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-
 
 /* Existing Campaigns */
 .existing {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .example ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: space-between;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Add Campaigns Button */
 .add {
-    position: relative;
-    display: flex;
-    padding: 1rem;
+  position: relative;
+  display: flex;
+  padding: 1rem;
 }
 
 .add button {
-    background-color: #4caf50; /* Green */
-    border: none;
-    flex: 1;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background-color: #4caf50; /* Green */
+  border: none;
+  flex: 1;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .add input {
-    padding: 10px 10px;
-    font-size: 1rem;
-    flex: 2;
-    border: 1px solid #dcdcdc;
-    border-radius: 5px;
-    margin-right: 10px; /* To give space between input and button */
+  padding: 10px 10px;
+  font-size: 1rem;
+  flex: 2;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px;
+  margin-right: 10px; /* To give space between input and button */
 }
 
 .add button:hover {
-    background-color: #45a049; /* Darker green */
+  background-color: #45a049; /* Darker green */
 }
-
-

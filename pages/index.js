@@ -3,54 +3,13 @@ import styles from "./index.module.css";
 import Example from "@/components/Home/Example/Example";
 
 import { useEffect, useState } from "react";
-
-const fetchCampaigns = async () => {
-  const dataJson = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/campaign/getAll");
-  const data = await dataJson.json();
-
-  console.log(data);
-
-  return {
-    data: data,
-  };
-};
-
-const createCampaign = async (
-  name,
-  preferences = { date: new Date().toLocaleString("en-US") }
-) => {
-  try {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/campaign/create", {
-      // replace 'path_to_your_handler' with the correct path
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        preferences,
-      }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data.message); // "Successfully added campaign"
-      return data;
-    } else {
-      const errorMessage = await response.text();
-      throw new Error(errorMessage);
-    }
-  } catch (error) {
-    console.error("There was an error creating the campaign", error);
-  }
-};
+import Navbar from "@/components/UI/Navbar/Navbar";
+import { fetchCampaigns, createCampaign } from "@/utils/campaigns";
 
 const Home = ({ data }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-
   const [campaigns, setCampaigns] = useState(data);
-
   const [campaignName, setCampaignName] = useState("");
 
   const addCampaign = async (name) => {
@@ -71,13 +30,16 @@ const Home = ({ data }) => {
   const handleDeleteCampaign = async (_id) => {
     setIsDeleting(true);
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/campaign/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ _id }),
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/api/campaign/deleteById",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ _id }),
+        }
+      );
 
       if (!response.ok) {
         const responseData = await response.json();
@@ -100,54 +62,65 @@ const Home = ({ data }) => {
     }
   };
 
+  const router = useRouter();
+
   return (
     <div className={styles.main}>
       {isDeleting && <div className={styles.feedback}>Deleting...</div>}
       {isCreating && <div className={styles.feedback}>Creating...</div>}
-      <div className={styles.navbar}>
-        <ul>
-          <li>Campaigns</li>
-        </ul>
+      <Navbar
+        pages={{
+          Campaign: () => {
+            router.push("/");
+          },
+          Favorites: () => {
+            router.push("/favorites");
+          },
+        }}
+      />
+      <div className={styles.add}>
+        <input
+          type="text"
+          value={campaignName}
+          onChange={(e) => setCampaignName(e.target.value)}
+          placeholder="Campaign Name"
+        />
+        <button
+          onClick={() => {
+            if (campaignName.trim() !== "") {
+              addCampaign(campaignName);
+            } else {
+              alert("Please enter a campaign name!");
+            }
+          }}
+        >
+          +
+        </button>
       </div>
-      <div className={styles.campaigns}>
-        <div className={styles.existing}>
-          {campaigns.map((item) => (
-            <Example
-              item={item}
-              key={item._id}
-              onDelete={handleDeleteCampaign}
-            />
-          ))}
+      {campaigns && (
+        <div className={styles.campaigns}>
+          <div className={styles.existing}>
+            {campaigns.map((item) => (
+              <Example
+                item={item}
+                key={item._id}
+                onDelete={handleDeleteCampaign}
+              />
+            ))}
+          </div>
         </div>
-        <div className={styles.add}>
-          <input
-            type="text"
-            value={campaignName}
-            onChange={(e) => setCampaignName(e.target.value)}
-            placeholder="Campaign Name"
-          />
-          <button
-            onClick={() => {
-              if (campaignName.trim() !== "") {
-                addCampaign(campaignName);
-              } else {
-                alert("Please enter a campaign name!");
-              }
-            }}
-          >
-            +
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
 
 export async function getServerSideProps() {
-  const dataJson = await fetch(process.env.NEXT_PUBLIC_API_URL+"/api/campaign/getAll");
+  const dataJson = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + "/api/campaign/getAll"
+  );
   const data = await dataJson.json();
 
-  console.log(data);
+  // console.log(data);
 
   return {
     props: {

@@ -1,4 +1,3 @@
-import Campaign from "@/utils/models/Campaign";
 import { MongoClient } from "mongodb";
 
 async function connectToDatabase() {
@@ -11,10 +10,10 @@ export default async function handler(req, res) {
     return res.status(405).end(); // Method not allowed if it's not a POST request
   }
 
-  const { name } = req.body;
+  const { campaignId, email } = req.body;
 
-  if (!name) {
-    return res.status(400).json({ message: "Name is required" });
+  if (!campaignId || !email) {
+    return res.status(400).json({ message: "Name and email body are required" });
   }
 
   let client;
@@ -23,21 +22,24 @@ export default async function handler(req, res) {
     client = await connectToDatabase();
     const db = client.db();
 
-    const newCampaign = Campaign(name);
+    const newFavorite = {
+      campaignId: campaignId,
+      email: email,
+      createdAt: new Date(),
+    };
 
-    const result = await db.collection("campaigns").insertOne(newCampaign)
+    const result = await db.collection("favorites").insertOne(newFavorite);
     const insertedId = result.insertedId;
 
-    return res.status(201).json({ _id:insertedId, message: "Successfully added campaign!" });
-    
-    return res.status(201).json({ message: "Successfully added Campaign!-2" });
+
+    return res.status(201).json({ message: "Successfully added Favorite", favoriteId: insertedId });
+
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+    return res.status(500).json({ message: "Internal Server Error", error: error.message });
   } finally {
     if (client) {
       client.close();
     }
   }
 }
+
