@@ -4,7 +4,7 @@ import RadioButton from "../RadioButton/RadioButton";
 import DropdownComponent from "../DropDown/DropDown";
 import About from "../About/About";
 import Submit from "../Submit/Submit";
-import { getDataFromEmails } from "@/utils/email";
+import { generateEmailData, fetchEmailsByCampaignId } from "@/utils/email";
 
 const options = {
   campaignGoal: [
@@ -49,6 +49,7 @@ const RadioForm = ({
   campaign,
   setCampaign,
   setIsSaving,
+  setEmails,
   _id,
   updateHandler,
   isSaving,
@@ -67,92 +68,16 @@ const RadioForm = ({
   const [website, setWebsite] = useState("");
   const [useWebsite, setUseWebsite] = useState(false);
 
-  // const getWebsiteData = async () => {
-  //   try {
-  //     if (useWebsite) {
-  //       const res = await fetch(
-  //         process.env.NEXT_PUBLIC_API_URL +
-  //           "/api/personalize/website?url=" +
-  //           website
-  //       );
-  //       const data = await res.json();
-  //       console.log(data);
-  //       return {
-  //         website,
-  //         websiteData,
-  //       };
-  //     }
-  //   } catch (error) {
-  //     alert(
-  //       "There was an error scraping the website (continuing without personalizing)"
-  //     );
-  //     return null;
-  //   }
-  // };
-
-  // const createHelper = async (campaign) => {
-  //   try {
-  //     const response = await fetch(
-  //       process.env.NEXT_PUBLIC_API_URL + "/api/ai/generate",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(campaign),
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-
-  //     const data = await response.json();
-
-  //     return {
-  //       data: data.message,
-  //     };
-  //   } catch (error) {
-  //     alert("There was an error generating the campaign: " + error.message);
-  //     return null;
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const generateCampaign = async (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-
-  //   await setCampaign(async (prev) => {
-  //     // handleOptionChange("generatedSamples", null);
-  //     const websiteDataObject = await getWebsiteData();
-  //     const generateData = await createHelper(prev);
-
-  //     return {
-  //       ...prev,
-  //       preferences: {
-  //         ...prev.preferences,
-  //         scrapped_website: websiteDataObject ? websiteDataObject.website : null,
-  //         scrapped_website_data: websiteDataObject ? websiteDataObject.websiteData : null,
-  //         generatedSamples: generateData ? generateData.data : null,
-  //       },
-  //     };
-  //   });
-
-  //   setIsSaving(true);
-  //   await updateHandler(_id, campaign);
-  //   setIsSaving(false);
-
-  // };
-
   const generateCampaign = async (e) => {
+
+    // save all the preferences first 
+    console.log(campaign)
+    await updateHandler(_id, campaign.name, campaign.preferences);
+    
     e.preventDefault();
     setIsLoading(true);
-
-    // Clear out old samples before fetching new ones
-    handleOptionChange("generatedSamples", null);
-
+    // do i need to store the scraped data? ... maybe in the future!
+    let websiteText = null;
     try {
       if (useWebsite) {
         const res = await fetch(
@@ -161,16 +86,23 @@ const RadioForm = ({
             website
         );
         const data = await res.json();
-        console.log(data);
-
-        handleOptionChange("scrapped_website", website);
-        handleOptionChange("scrapped_website_data", data.scrapped_website_data);
+        websiteText = data.scrapped_website_data;
       }
     } catch (error) {
       alert(
         "There was an error scraping the website (continuing without personalizing)"
       );
     }
+
+    const updatedBody = {
+      _id: campaign._id,
+    };
+
+    if (websiteText) {
+      updatedBody.websiteData = websiteText;
+    }
+
+    console.log(JSON.stringify(updatedBody));
 
     try {
       const response = await fetch(
@@ -180,7 +112,7 @@ const RadioForm = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ _id: campaign._id }),
+          body: JSON.stringify(updatedBody),
         }
       );
 
@@ -189,15 +121,21 @@ const RadioForm = ({
       }
 
       const data = await response.json();
-
-      await handleOptionChange("generatedSamples", data);
-      setIsLoading(false);
+      
       // console.log(data);
 
-      const emailData = await getDataFromEmails(campaign._id, data);
-      console.log("Email Data: " + emailData);
-      await handleOptionChange("emailData", emailData);
-      
+      // post all the data,
+
+      console.log("\n\n\n\n\n" + data + "\n\n\n\n\n");
+
+      await generateEmailData(campaign._id, data);
+
+      // get new data from campaign._id
+
+      const emails = await fetchEmailsByCampaignId(campaign._id);
+
+      setEmails(emails.data);
+      setIsLoading(false);
 
       setTimeout(async () => {
         setIsSaving(true);
@@ -224,25 +162,28 @@ const RadioForm = ({
             title="Campaign Goal"
             options={options.campaignGoal}
             selectedOption={campaign.preferences.campaignGoal}
-            handleOptionChange={(value) =>
-              handleOptionChange("campaignGoal", value)
-            }
+            handleOptionChange={async (value) => {
+              await handleOptionChange("campaignGoal", value);
+              // await updateHandler(_id, campaign.name, campaign.preferences);
+            }}
           />
           <DropdownComponent
             title="Brand Tone"
             options={options.brandTone}
             selectedOption={campaign.preferences.brandTone}
-            handleOptionChange={(value) =>
-              handleOptionChange("brandTone", value)
-            }
+            handleOptionChange={async (value) => {
+              await handleOptionChange("brandTone", value);
+              // await updateHandler(_id, campaign.name, campaign.preferences);
+            }}
           />
 
           <DropdownComponent
             title="Industry"
             options={options.industry}
-            handleOptionChange={(value) =>
-              handleOptionChange("industry", value)
-            }
+            handleOptionChange={async (value) => {
+              await handleOptionChange("industry", value);
+              // await updateHandler(_id, campaign.name, campaign.preferences);
+            }}
             selectedOption={campaign.preferences.industry}
           />
         </div>
@@ -250,9 +191,10 @@ const RadioForm = ({
 
       {campaign.preferences && (
         <About
-          handleOptionChange={(value) =>
-            handleOptionChange("description", value)
-          }
+          handleOptionChange={(value) => {
+            handleOptionChange("description", value);
+            // updateHandler(_id, campaign.name, campaign.preferences);
+          }}
           saved={campaign.preferences.description}
         />
       )}
@@ -265,12 +207,20 @@ const RadioForm = ({
                 campaign.preferences.generatedSamples.length > 0
               : false
           }
-          website={website}
+          website={
+            campaign.preferences.website ? campaign.preferences.website : ""
+          }
+          useWebsite={
+            campaign.preferences.useWebsite
+              ? campaign.preferences.useWebsite
+              : ""
+          }
           setWebsite={setWebsite}
           setUseWebsite={setUseWebsite}
           generateCampaign={generateCampaign}
           isSaving={isSaving}
           isLoading={isLoading}
+          handleOptionChange={handleOptionChange}
           updateHandler={async () => {
             setIsSaving(true);
             await updateHandler(_id, campaign.name, campaign.preferences);

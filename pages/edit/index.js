@@ -7,13 +7,15 @@ import GeneratedSamples from "@/components/Edit/GeneratedSamples/GeneratedSample
 import Navbar from "@/components/UI/Navbar/Navbar";
 import { updateCampaign } from "@/utils/campaigns";
 
-const Edit = ({ data }) => {
+const Edit = ({ campaignData, emailData }) => {
   const router = useRouter();
 
   const resultsRef = useRef(null);
-  const [campaign, setCampaign] = useState(data);
+  const [campaign, setCampaign] = useState(campaignData);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [goingBack, setGoingBack] = useState(false);
+  const [emails, setEmails] = useState(emailData);
 
   // console.log(JSON.stringify(campaign));
 
@@ -67,7 +69,9 @@ const Edit = ({ data }) => {
           }}
         />
         <div className={styles.main}>
+        
           {goingBack && <div className={styles.feedback}>Loading</div>}
+          {isDeleting && <div className={styles.feedback}>Deleting</div>}
           <div className={styles.form}>
             <div className={styles.header}>
               {campaign && <h2>{campaign.name}</h2>}
@@ -81,6 +85,7 @@ const Edit = ({ data }) => {
                 scrollDown={scrollDown}
                 campaign={campaign}
                 setCampaign={setCampaign}
+                setEmails={setEmails}
                 isSaving={isSaving}
                 setIsSaving={setIsSaving}
                 updateHandler={updateCampaign}
@@ -89,32 +94,33 @@ const Edit = ({ data }) => {
             )}
           </div>
 
-          {campaign &&
-            campaign.preferences &&
-            campaign.preferences.generatedSamples &&
-            campaign.preferences.generatedSamples.length > 0 && (
-              <GeneratedSamples
-                generatedValues={campaign.preferences.generatedSamples}
-                setGeneratedValues={setCampaign}
-                campaignId={router.query._id}
-                editSample={editSample}
-                deleteSample={deleteSample}
-                updateHandler={async () => {
-                  setIsSaving(true);
-                  try {
-                    await updateCampaign(
-                      router.query._id,
-                      campaign.name,
-                      campaign.preferences
-                    );
-                  } catch {
-                    //
-                  } finally {
-                    setIsSaving(false);
-                  }
-                }}
-              />
-            )}
+          {emailData && campaign && campaign.preferences && (
+            <GeneratedSamples
+              generatedValues={campaign.preferences.generatedSamples}
+              setGeneratedValues={setCampaign}
+              campaignId={router.query._id}
+              editSample={editSample}
+              emails={emails}
+              setEmails={setEmails}
+              deleteSample={deleteSample}
+              setIsDeleting={setIsDeleting}
+              setIsSaving={setIsSaving}
+              updateHandler={async () => {
+                setIsSaving(true);
+                try {
+                  await updateCampaign(
+                    router.query._id,
+                    campaign.name,
+                    campaign.preferences
+                  );
+                } catch {
+                  //
+                } finally {
+                  setIsSaving(false);
+                }
+              }}
+            />
+          )}
         </div>
       </div>
     </>
@@ -122,17 +128,31 @@ const Edit = ({ data }) => {
 };
 
 export async function getServerSideProps(context) {
-  const response = await fetch(
+  const campaignUrl =
     process.env.NEXT_PUBLIC_API_URL +
-      `/api/campaign/getById?_id=${context.query._id}`
-  );
-  const data = await response.json();
+    `/api/campaign/getById?_id=${context.query._id}`;
 
-  // console.log(data);
+  const emailDataUrl =
+    process.env.NEXT_PUBLIC_API_URL +
+    `/api/emailData/getByCampaignId?campaignId=${context.query._id}`;
+
+  const [campaignResponse, emailDataResponse] = await Promise.all([
+    fetch(campaignUrl),
+    fetch(emailDataUrl),
+  ]);
+
+  const [campaignData, emailData] = await Promise.all([
+    campaignResponse.json(),
+    emailDataResponse.json(),
+  ]);
+
+  console.log(campaignData);
+  console.log(emailData);
 
   return {
     props: {
-      data: data,
+      campaignData: campaignData,
+      emailData: emailData,
     },
   };
 }

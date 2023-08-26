@@ -9,73 +9,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const Sample = ({
   campaignId,
   item,
+  setIsSaving,
   num,
   setGeneratedValues,
   updateHandler,
+  favoriteEmail,
+  unfavoriteEmail,
+  saveEditedEmail,
   deleteSample,
 }) => {
+  const [emailBody, setEmailBody] = useState(item.emailText);
+
   const onChangeHandler = (event, index) => {
-    setGeneratedValues((prevState) => {
-      const newState = JSON.parse(JSON.stringify(prevState));
-      newState.preferences.generatedSamples[index].body = event.target.value;
-      return newState;
-    });
-  };
-
-  const onFavorite = async () => {
-    try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/api/generations/favorite",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            campaignId,
-            email: item.body,
-          }),
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message); // "Successfully added campaign"
-        return data;
-      } else {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage);
-      }
-    } catch (error) {
-      console.error("There was an error creating the campaign", error);
-    }
-  };
-
-  const [generateId, setGenerateId] = useState(null);
-
-  const handleDeleteFavorite = async (_id) => {
-    try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/api/personalize/delete",
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ _id }),
-        }
-      );
-
-      if (!response.ok) {
-        const responseData = await response.json();
-        console.error(
-          `Error deleting item: ${responseData.message || "Unknown error"}`
-        );
-        return;
-      }
-      console.log(`Successfully deleted favorite with _id: ${_id}`);
-    } catch (error) {
-      console.error(`Error deleting item with _id: ${_id}`, error);
-    }
+    setEmailBody(event.target.value);
   };
 
   const startEditing = () => {
@@ -86,7 +32,8 @@ const Sample = ({
     setIsEditing(false);
   };
 
-  const [liked, setLiked] = useState(false);
+  console.log(item);
+  const [liked, setLiked] = useState(item.favorite);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -100,12 +47,12 @@ const Sample = ({
           <>
             <textarea
               className={styles.sample}
-              value={item.body}
+              defaultValue={item.emailText}
               onChange={(e) => onChangeHandler(e, num)}
             />
           </>
         ) : (
-          <div className={styles.sample_div}>{item.body}</div>
+          <div className={styles.sample_div}>{item.emailText}</div>
         )}
 
         <div className={styles.actions}>
@@ -119,23 +66,20 @@ const Sample = ({
             <SaveIcon
               className={styles.saveButton}
               onClick={async () => {
-                await updateHandler();
+                setIsSaving(true);
+                await saveEditedEmail(item._id, emailBody);
                 stopEditing(num);
+                setIsSaving(false);
               }}
             />
           )}
-          <DeleteIcon
-            className={styles.deleteButton}
-            onClick={() => deleteSample(num)}
-          />
+          <DeleteIcon className={styles.deleteButton} onClick={deleteSample} />
           {liked ? (
             <FavoriteIcon
               className={styles.likeButton}
               onClick={() => {
                 try {
-                  if (generateId) {
-                    handleDeleteFavorite(generateId);
-                  }
+                  unfavoriteEmail();
                   setLiked(false);
                 } catch {
                   alert("server error 500!");
@@ -148,8 +92,7 @@ const Sample = ({
             <FavoriteBorderIcon
               onClick={async () => {
                 try {
-                  const res = await onFavorite();
-                  setGenerateId(res.favoriteId);
+                  favoriteEmail();
                   setLiked(true);
                 } catch {
                   alert("server error 500!");

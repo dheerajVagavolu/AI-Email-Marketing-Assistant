@@ -11,6 +11,8 @@ export const fetchCampaigns = async () => {
   };
 };
 
+
+
 export const createCampaign = async (name) => {
   try {
     const response = await fetch(

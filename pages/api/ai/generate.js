@@ -9,7 +9,7 @@ async function connectToDatabase() {
   return client;
 }
 
-const createPrompt = (campaign) => {
+const createPrompt = (campaign, websiteData) => {
   let preferencesText = "";
 
   // Extract preferences, ignoring certain keys
@@ -29,15 +29,12 @@ const createPrompt = (campaign) => {
     ? `The main focus is: ${campaign.preferences.description}.\n`
     : "";
 
-  let toneText =
-    campaign.preferences.useWebsiteData &&
-    campaign.preferences.website &&
-    campaign.preferences.scrapped_website_data
-      ? `Ensure that the emails adopt a tone personalized for the user. This text contains language patterns of the target user: ${campaign.preferences.scrapped_website_data}.\n`
+  let toneText = websiteData
+      ? `Ensure that the emails adopt a tone personalized for the user based on their website which is shown between [START] and [END] tags: [START]${websiteData}[END].\n`
       : "";
 
   return `For the Marketing Campaign titled "${campaign.name}", generate 5 distinct emails. ${description}${toneText}Given the below preferences, each email should have a subject and a body (under 10 lines each). Strictly use the following structure for each email:
-{num}: Subject: {subject}
+Subject: {subject}
 
 Body: {body}
 
@@ -66,7 +63,7 @@ export default async function handler(req, res) {
       client = await connectToDatabase();
       const db = client.db();
 
-      const { _id } = req.body;
+      const { _id, websiteData } = req.body;
 
       if (!_id) {
         return res
@@ -81,7 +78,12 @@ export default async function handler(req, res) {
         return res.status(404).json({ message: "Campaign not found" });
       }
 
-      const prompt = createPrompt(campaign);
+      let prompt = null;
+      if (websiteData ){
+        prompt = createPrompt(campaign, websiteData);
+      }else{
+        prompt = createPrompt(campaign);
+      }
 
       
 

@@ -18,7 +18,7 @@
 }
 
 .save_button {
-  background-color: rgb(72, 97, 59);
+  background-color: #3498db;
   color: white;
 }
 
@@ -29,13 +29,13 @@
 
 .button {
   font-size: 1rem;
-  background-color: rgb(146, 87, 64);
+  background-color: #3498db;
   color: white;
 }
 
 .button:hover,
 .button:focus {
-  background-color: rgb(232, 78, 16);
+  background-color: rgb(83, 159, 46);
 }
 
 .optional {

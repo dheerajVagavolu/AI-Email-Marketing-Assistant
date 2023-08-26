@@ -29,18 +29,35 @@ export default async function handler(req, res) {
       .findOne({ _id: new ObjectId(_id) });
 
     if (!prevData) {
-      throw new Error("Cannout find previos data!");
-    } else {
-      
+      throw new Error("Cannot find previous data!");
+    }
+
+    let updatedPreferences = prevData.preferences;
+
+    if (preferences) {
+      for (let key in preferences) {
+        if (updatedPreferences[key]) {
+          if (Array.isArray(updatedPreferences[key])) {
+            updatedPreferences[key].push(...preferences[key]);
+          } else if (typeof updatedPreferences[key] === "object") {
+            updatedPreferences[key] = {
+              ...updatedPreferences[key],
+              ...preferences[key]
+            };
+          } else {
+            updatedPreferences[key] = preferences[key];
+          }
+        } else {
+          updatedPreferences[key] = preferences[key];
+        }
+      }
     }
 
     const updatedCampaign = Campaign(
       name ? name : prevData.name,
-      preferences ? preferences : prevData.preferences,
+      updatedPreferences,
       emailData ? emailData : prevData.emailData,
     );
-
-    
 
     const result = await db
       .collection("campaigns")
