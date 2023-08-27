@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "4ffd16fa-68ff-4bfa-b0c8-7452d70c02e7",
+		"name": "AI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5841206"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/api/ai/generate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_id\": \"64ea28e8220a0070b20a988d\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/ai/generate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ai",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

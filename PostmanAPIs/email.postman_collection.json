@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "73928a68-4104-4d5c-be85-f730be90ef65",
+		"name": "email",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5841206"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/api/emailData/create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\":\"64e96b24ab329251ca6e803d\",\n    \"emailText\": \"This is a sample 2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/emailData/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"emailData",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/emailData/getByCampaignId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/emailData/getByCampaignId?campaignId=64ea3aa4220a0070b20a98cc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"emailData",
+						"getByCampaignId"
+					],
+					"query": [
+						{
+							"key": "campaignId",
+							"value": "64ea3aa4220a0070b20a98cc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/emailData/getFavoritesByCampaignId?campaignId=64e96b24ab329251ca6e803d",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/emailData/getFavoritesByCampaignId?campaignId=64e96b24ab329251ca6e803d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"emailData",
+						"getFavoritesByCampaignId"
+					],
+					"query": [
+						{
+							"key": "campaignId",
+							"value": "64e96b24ab329251ca6e803d"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/emailData/update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_id\": \"64e978f8ab329251ca6e803f\",\n    \"emailText\": \"New Text! Wow!\",\n    \"favorite\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/emailData/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"emailData",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/emailData/deleteById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_id\": \"64e98d18ab329251ca6e805f\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/emailData/deleteById",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"emailData",
+						"deleteById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/emailData/emailsWithHistory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/emailData/emailsWithHistory",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"emailData",
+						"emailsWithHistory"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
