@@ -15,7 +15,7 @@ const History = ({ data }) => {
             ))}
           </div>
         ) : (
-          <p style={{ padding: "4rem" }}>No email history available.</p>
+          <p style={{ padding: "4rem" }}>Make some edits to see change history.</p>
         )
       ) : (
         <p>Error: Email data is not available.</p>
