@@ -68,16 +68,21 @@ const Home = ({ data }) => {
     <div className={styles.main}>
       {isDeleting && <div className={styles.feedback}>Deleting...</div>}
       {isCreating && <div className={styles.feedback}>Creating...</div>}
-      <Navbar
-        pages={{
-          Campaign: () => {
-            router.push("/");
-          },
-          Favorites: () => {
-            router.push("/favorites");
-          },
+      <Navbar />
+
+      <p
+        style={{
+          padding: "1rem",
+          textAlign: "center",
+          fontSize: "0.8rem",
+          color: "#999",
         }}
-      />
+      >
+        <em>
+          Generate a new Campaign to edit and create customized Emails
+        </em>
+      </p>
+
       <div className={styles.add}>
         <input
           type="text"

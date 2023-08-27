@@ -22,6 +22,13 @@
   color: white;
 }
 
+.optionalWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .save_button:hover,
 .save_button:focus {
   background-color: rgb(83, 159, 46);

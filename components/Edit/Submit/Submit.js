@@ -22,27 +22,38 @@ const Submit = ({
         >
           {isSaving ? " ... " : "Save Preferences"}
         </button>
-
-        <div className={styles.optional}>
-          <input
-            type="text"
-            placeholder="Use Website"
-            defaultValue={website}
-            className={styles.website_name}
-            onChange={(e) => {
-              handleOptionChange("website", e.target.value);
-              setWebsite(e.target.value);
+        <div className={styles.optionalWrapper}>
+          <p
+            style={{
+              padding: "1rem 2rem",
+              textAlign: "center",
+              fontSize: "0.8rem",
+              color: "#999",
             }}
-          ></input>
-          <input
-            type="checkbox"
-            defaultChecked={useWebsite}
-            disabled={website === ""}
-            onChange={async (e) => {
-              await handleOptionChange("useWebsite", e.target.checked);
-              await setUseWebsite(e.target.checked)
-            } }
-          />
+          >
+            <em>Enter Website to set the tone of the emails! (optional)</em>
+          </p>
+          <div className={styles.optional}>
+            <input
+              type="text"
+              placeholder="Use Website"
+              defaultValue={website}
+              className={styles.website_name}
+              onChange={(e) => {
+                handleOptionChange("website", e.target.value);
+                setWebsite(e.target.value);
+              }}
+            ></input>
+            <input
+              type="checkbox"
+              defaultChecked={useWebsite}
+              disabled={website === ""}
+              onChange={async (e) => {
+                await handleOptionChange("useWebsite", e.target.checked);
+                await setUseWebsite(e.target.checked);
+              }}
+            />
+          </div>
         </div>
 
         <button

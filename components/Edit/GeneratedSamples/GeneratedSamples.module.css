@@ -21,7 +21,7 @@
 
   /* height: 2rem; */
   border-radius: 4px;
-  
+
   font-size: 1rem;
   transition: border 0.2s ease;
   transition: all 0.2s ease-in-out;
@@ -44,12 +44,11 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  
+
   width: 100%;
   margin: 40px;
   padding: 40px;
 }
-
 
 .items {
   list-style: none;
@@ -60,7 +59,6 @@
 
 .results {
   width: 80%;
-  
 }
 
 .sample {
@@ -102,12 +100,6 @@
   border-color: #3c4338;
 }
 
-.item:hover,
-.item_clicked:hover {
-  border: 2px solid #185316;
-  /* padding: 0.22rem 2rem; */
-}
-
 .item:first-of-type,
 .item_clicked:first-of-type {
   border-radius: 1rem 1rem 0rem 0rem;
@@ -138,9 +130,9 @@
 
   .sample {
     width: 100%;
-    padding: 0.5rem;
+    padding: 1rem;
     border: none;
-    height: 4rem;
+    height: 20rem;
     border-radius: 4px;
     resize: none;
     font-size: 1rem;

@@ -6,7 +6,6 @@ import { updateEmailHandler } from "@/utils/email";
 import { fetchEmailsByCampaignId } from "@/utils/email";
 
 const GeneratedSamples = ({
-  generatedValues,
   setIsDeleting,
   setGeneratedValues,
   setIsSaving,
@@ -14,7 +13,7 @@ const GeneratedSamples = ({
   emails,
   setEmails,
   resultsRef,
-  deleteSample,
+
   updateHandler,
 }) => {
   const updateEmail = async (_id, favorite = null, emailText = null) => {
@@ -60,7 +59,16 @@ const GeneratedSamples = ({
         <div className={styles.results} ref={resultsRef}>
           <div className={styles.header}>
             <h1>Generated Emails</h1>
-            <p>(Edit, Delete or Favorite - Make sure to save)</p>
+            <p
+              style={{
+                padding: "1rem 2rem",
+                textAlign: "center",
+                fontSize: "1rem",
+                color: "#999",
+              }}
+            >
+              <em>(Edit, Delete or Mark as Favorite - Make sure to save)</em>
+            </p>
           </div>
 
           <ul className={styles.items}>

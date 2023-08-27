@@ -54,30 +54,35 @@ const Edit = ({ campaignData, emailData }) => {
   return (
     <>
       <div className={styles.wrapper}>
-        <Navbar
-          pages={{
-            Campaign: () => {
-              setGoingBack(true);
-              router.push("/");
-              setTimeout(() => {
-                setGoingBack(false);
-              }, 1000);
-            },
-            Favorites: () => {
-              router.push("/favorites");
-            },
+        <Navbar />
+        <p
+          style={{
+            padding: "1rem",
+            textAlign: "center",
+            fontSize: "0.8rem",
+            color: "#999",
           }}
-        />
+        >
+          <em>Select your preferences and generate custom Emails!</em>
+        </p>
         <div className={styles.main}>
-        
           {goingBack && <div className={styles.feedback}>Loading</div>}
           {isDeleting && <div className={styles.feedback}>Deleting</div>}
           <div className={styles.form}>
             <div className={styles.header}>
               {campaign && <h2>{campaign.name}</h2>}
-              <p>
-                Introduce information about your business and the goal of the
-                campaign and we'll take care of the rest
+              <p
+                style={{
+                  padding: "1rem 2rem",
+                  textAlign: "center",
+                  fontSize: "1rem",
+                  color: "#999",
+                }}
+              >
+                <em>
+                  Introduce information about your business and the goal of the
+                  campaign and we'll take care of the rest
+                </em>
               </p>
             </div>
             {campaign && (
@@ -145,9 +150,6 @@ export async function getServerSideProps(context) {
     campaignResponse.json(),
     emailDataResponse.json(),
   ]);
-
-  console.log(campaignData);
-  console.log(emailData);
 
   return {
     props: {
