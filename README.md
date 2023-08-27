@@ -1,34 +1,20 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## AI CHALLENGE:
 
-## Getting Started
+Your task is to create an "email marketing content assistant". The user types certain parameters and criteria about their business and campaign goals, and your system will recommend 5 emails that the customer can use. You can leverage any AI/ML models or APIs to get this task done. it's your time to shine!
+OPTIONAL BONUS task: Your system will miss the brand tone and voice of the customer. You can ask the user to type their website and twitter, so you can fine tune your model by scrapping customer data such as social posts or website content.
 
-First, run the development server:
+### Overview
+**Platform**: I decided to go with NextJS for building a full-stack application, drawing inspiration from your company's tech stack.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+**Database**: Leveraging NoSQL MongoDB, I ensured seamless storage functionality.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**AI/ML Integration**: My go-to choice was the GPT-3 Turbo model. A bit of prompt engineering helped me achieve desired content outputs. I used Open AIs API to achieve this.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+**Additional Features**: The "like" and "customize" features I incorporated will be instrumental for future human feedback to the model, enhancing the RLHF approach.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**Web Scraping**: Using cheerio, I implemented a simple web scraper to assimilate website data, ensuring that the brand's tone was accurately captured in the recommendations.
 
-## Learn More
+**Twitter Integration**: Although I did explore the possibility of incorporating Twitter posts, the absence of a free API version led me to hold off on this integration. Still, I believe the foundation I've laid makes it relatively straightforward to plug in similar data in the future.
 
-To learn more about Next.js, take a look at the following resources:
+#### Production Link: https://recommender-tawny.vercel.app/
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
