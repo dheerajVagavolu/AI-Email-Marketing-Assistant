@@ -1,20 +1,31 @@
-## AI CHALLENGE:
+# AI Challenge: Email Marketing Content Assistant
 
-Your task is to create an "email marketing content assistant". The user types certain parameters and criteria about their business and campaign goals, and your system will recommend 5 emails that the customer can use. You can leverage any AI/ML models or APIs to get this task done. it's your time to shine!
-OPTIONAL BONUS task: Your system will miss the brand tone and voice of the customer. You can ask the user to type their website and twitter, so you can fine tune your model by scrapping customer data such as social posts or website content.
+## Description
+Your mission, should you choose to accept it, is to craft an "email marketing content assistant". With this system, users input specific parameters about their business and campaign goals. In response, the system recommends 5 emails tailored to their needs. Participants are encouraged to use any AI/ML models or APIs to accomplish this challenge. Show us what you got!
 
-### Overview
-**Platform**: I decided to go with NextJS for building a full-stack application, drawing inspiration from your company's tech stack.
+### **Bonus Task** (Optional):
+Add a feature where the system can understand and adapt to the brand's tone and voice. One way to achieve this might be to allow users to input their website and Twitter handles, enabling the model to fine-tune its recommendations by scraping relevant content from these platforms.
 
-**Database**: Leveraging NoSQL MongoDB, I ensured seamless storage functionality.
+## My Solution:
 
-**AI/ML Integration**: My go-to choice was the GPT-3 Turbo model. A bit of prompt engineering helped me achieve desired content outputs. I used Open AIs API to achieve this.
+### Platform:
+- **Framework**: [NextJS](https://nextjs.org/) - I chose this to build a full-stack application, influenced by your company's tech preferences.
 
-**Additional Features**: The "like" and "customize" features I incorporated will be instrumental for future human feedback to the model, enhancing the RLHF approach.
+### Database:
+- **Database Management System**: [MongoDB](https://www.mongodb.com/) (NoSQL) - Ensuring robust data storage functionality.
 
-**Web Scraping**: Using cheerio, I implemented a simple web scraper to assimilate website data, ensuring that the brand's tone was accurately captured in the recommendations.
+### AI/ML Integration:
+- **Model**: [GPT-3 Turbo](https://openai.com/blog/dall-e-2/) from OpenAI. With the right prompt engineering, I achieved content outputs that closely align with the users' requirements.
 
-**Twitter Integration**: Although I did explore the possibility of incorporating Twitter posts, the absence of a free API version led me to hold off on this integration. Still, I believe the foundation I've laid makes it relatively straightforward to plug in similar data in the future.
+### Additional Features:
+- **Interactivity**: Incorporated "like" and "customize" features. These will be pivotal in gathering human feedback, refining the RLHF (Reinforcement Learning from Human Feedback) approach in future iterations.
 
-#### Production Link: https://recommender-tawny.vercel.app/
+### Web Scraping:
+- **Tool Used**: [Cheerio](https://cheerio.js.org/) - With this, I was able to scrape websites, ensuring recommendations align well with the brand's tone and style.
 
+### **Live Demo**:
+Experience my solution live at [recommender-tawny.vercel.app](https://recommender-tawny.vercel.app/)
+
+---
+
+*Feedback, issues, and contributions are warmly welcomed. Feel free to open a PR or issue!*
