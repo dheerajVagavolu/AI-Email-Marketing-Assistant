@@ -33,7 +33,7 @@ const createPrompt = (campaign, websiteData) => {
       ? `Ensure that the emails adopt a tone personalized for the user based on their website which is shown between [START] and [END] tags: [START]${websiteData}[END].\n`
       : "";
 
-  return `For the Marketing Campaign titled "${campaign.name}", generate 5 distinct emails. ${description}${toneText}Given the below preferences, each email should have a subject and a body (under 10 lines each). Strictly use the following structure for each email:
+  return `For the Marketing Campaign titled "${campaign.name}", generate 3 distinct emails. ${description}${toneText}Given the below preferences, each email should have a subject and a body (under 10 lines each). Strictly use the following structure for each email:
 Subject: {subject}
 
 Body: {body}
