@@ -30,15 +30,15 @@ const createPrompt = (campaign, websiteData) => {
     : "";
 
   let toneText = websiteData
-      ? `Ensure that the emails adopt a tone personalized for the user based on their website which is shown between [START] and [END] tags: [START]${websiteData}[END].\n`
+      ? `Ensure that the email adopt a tone personalized for the user based on their website which is shown between [START] and [END] tags: [START]${websiteData}[END].\n`
       : "";
 
-  return `For the Marketing Campaign titled "${campaign.name}", generate 3 distinct emails. ${description}${toneText}Given the below preferences, each email should have a subject and a body (under 10 lines each). Strictly use the following structure for each email:
+  return `For the Marketing Campaign titled "${campaign.name}", generate 1 distinct email. ${description}${toneText}Given the below preferences, the email should have a subject and a body (under 10 lines). Strictly use the following structure for the email:
 Subject: {subject}
 
 Body: {body}
 
-Separate each email with '---'. Refrain from using numbers, bullets, or quotations in the content.
+Refrain from using numbers, bullets, or quotations in the content.
 
 Preferences:
 ${preferencesText}`;
